@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { type Locale, ui } from "@/lib/i18n";
 
 type InquiryForm = {
   name: string;
@@ -20,10 +21,13 @@ type InquiryForm = {
 
 export function ContactForm({
   defaultProductInterest = "",
+  locale,
 }: {
   defaultProductInterest?: string;
+  locale: Locale;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const copy = ui[locale].contact;
   const {
     register,
     handleSubmit,
@@ -50,6 +54,7 @@ export function ContactForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...values,
+            language: locale,
             source: "Nusantara Harvest Co. website",
             submittedAt: new Date().toISOString(),
           }),
@@ -62,14 +67,10 @@ export function ContactForm({
         await new Promise((resolve) => setTimeout(resolve, 650));
       }
 
-      toast.success(
-        webhookUrl
-          ? "Inquiry sent to sales workflow."
-          : "Inquiry captured in demo mode. Add NEXT_PUBLIC_N8N_WEBHOOK_URL to enable n8n."
-      );
+      toast.success(webhookUrl ? copy.successWebhook : copy.successDemo);
       reset();
     } catch {
-      toast.error("Inquiry could not be sent. Please email sales@nusantaraharvest.example.");
+      toast.error(copy.error);
     } finally {
       setIsSubmitting(false);
     }
@@ -78,68 +79,68 @@ export function ContactForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5">
       <div className="grid gap-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">{copy.labels.name}</Label>
         <Input
           id="name"
           autoComplete="name"
           aria-invalid={Boolean(errors.name)}
-          {...register("name", { required: "Name is required" })}
+          {...register("name", { required: copy.required.name })}
         />
         {errors.name ? <p className="text-sm text-destructive">{errors.name.message}</p> : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="company">Company</Label>
+        <Label htmlFor="company">{copy.labels.company}</Label>
         <Input
           id="company"
           autoComplete="organization"
           aria-invalid={Boolean(errors.company)}
-          {...register("company", { required: "Company is required" })}
+          {...register("company", { required: copy.required.company })}
         />
         {errors.company ? <p className="text-sm text-destructive">{errors.company.message}</p> : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{copy.labels.email}</Label>
         <Input
           id="email"
           type="email"
           autoComplete="email"
           aria-invalid={Boolean(errors.email)}
           {...register("email", {
-            required: "Email is required",
+            required: copy.required.email,
             pattern: {
               value: /^\S+@\S+\.\S+$/,
-              message: "Enter a valid email",
+              message: copy.required.validEmail,
             },
           })}
         />
         {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="productInterest">Product Interest</Label>
+        <Label htmlFor="productInterest">{copy.labels.productInterest}</Label>
         <Input
           id="productInterest"
-          placeholder="Dried eucheuma seaweed, cocoa beans, coconut..."
+          placeholder={copy.placeholders.productInterest}
           aria-invalid={Boolean(errors.productInterest)}
-          {...register("productInterest", { required: "Product interest is required" })}
+          {...register("productInterest", { required: copy.required.productInterest })}
         />
         {errors.productInterest ? (
           <p className="text-sm text-destructive">{errors.productInterest.message}</p>
         ) : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="message">Message</Label>
+        <Label htmlFor="message">{copy.labels.message}</Label>
         <Textarea
           id="message"
           rows={5}
-          placeholder="Target quantity, destination port, specification, and shipment timeline"
+          placeholder={copy.placeholders.message}
           aria-invalid={Boolean(errors.message)}
-          {...register("message", { required: "Message is required" })}
+          {...register("message", { required: copy.required.message })}
         />
         {errors.message ? <p className="text-sm text-destructive">{errors.message.message}</p> : null}
       </div>
       <Button type="submit" size="lg" disabled={isSubmitting} className="h-11">
         {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Send className="size-4" aria-hidden="true" />}
-        Send Inquiry
+        {copy.submit}
       </Button>
     </form>
   );

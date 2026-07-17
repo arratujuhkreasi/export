@@ -5,19 +5,23 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getPostBySlug, posts } from "@/lib/cms";
+import { getPostBySlug, getPostStaticParams } from "@/lib/cms";
+import { hrefWithLocale, resolveLocale, ui } from "@/lib/i18n";
 
 type InsightPageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ lang?: string | string[] }>;
 };
 
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  return getPostStaticParams();
 }
 
-export async function generateMetadata({ params }: InsightPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: InsightPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { lang } = await searchParams;
+  const locale = resolveLocale(lang);
+  const post = getPostBySlug(slug, locale);
 
   if (!post) {
     return { title: "Insight Not Found" };
@@ -29,9 +33,12 @@ export async function generateMetadata({ params }: InsightPageProps): Promise<Me
   };
 }
 
-export default async function InsightDetailPage({ params }: InsightPageProps) {
+export default async function InsightDetailPage({ params, searchParams }: InsightPageProps) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { lang } = await searchParams;
+  const locale = resolveLocale(lang);
+  const copy = ui[locale].insights;
+  const post = getPostBySlug(slug, locale);
 
   if (!post) {
     notFound();
@@ -41,9 +48,9 @@ export default async function InsightDetailPage({ params }: InsightPageProps) {
     <article className="bg-background py-10 sm:py-16">
       <div className="mx-auto w-full max-w-3xl px-4 sm:px-6 lg:px-8">
         <Button asChild variant="ghost" className="mb-6 px-0">
-          <Link href="/insights">
+          <Link href={hrefWithLocale("/insights", locale)}>
             <ArrowLeft className="size-4" aria-hidden="true" />
-            Back to Insights
+            {copy.back}
           </Link>
         </Button>
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1d6b4f]">

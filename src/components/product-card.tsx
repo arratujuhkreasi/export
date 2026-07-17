@@ -6,12 +6,15 @@ import type { Product } from "@/lib/cms";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { hrefWithLocale, type Locale, ui } from "@/lib/i18n";
 
 export function ProductCard({
   product,
+  locale,
   imageLoading = "lazy",
 }: {
   product: Product;
+  locale: Locale;
   imageLoading?: "eager" | "lazy";
 }) {
   return (
@@ -33,8 +36,8 @@ export function ProductCard({
       </CardContent>
       <CardFooter className="p-5 pt-0">
         <Button asChild variant="outline" className="w-full">
-          <Link href={`/products/${product.slug}`}>
-            View Details <ArrowRight className="size-4" aria-hidden="true" />
+          <Link href={hrefWithLocale(`/products/${product.slug}`, locale)}>
+            {ui[locale].products.viewDetails} <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </Button>
       </CardFooter>

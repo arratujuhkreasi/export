@@ -5,12 +5,15 @@ import { ArrowRight } from "lucide-react";
 import type { Post } from "@/lib/cms";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { hrefWithLocale, type Locale, ui } from "@/lib/i18n";
 
 export function InsightCard({
   post,
+  locale,
   imageLoading = "lazy",
 }: {
   post: Post;
+  locale: Locale;
   imageLoading?: "eager" | "lazy";
 }) {
   return (
@@ -34,8 +37,8 @@ export function InsightCard({
       </CardContent>
       <CardFooter className="p-5 pt-0">
         <Button asChild variant="ghost" className="px-0">
-          <Link href={`/insights/${post.slug}`}>
-            Read Article <ArrowRight className="size-4" aria-hidden="true" />
+          <Link href={hrefWithLocale(`/insights/${post.slug}`, locale)}>
+            {ui[locale].insights.readArticle} <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </Button>
       </CardFooter>
