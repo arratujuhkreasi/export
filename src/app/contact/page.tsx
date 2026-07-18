@@ -63,7 +63,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                 </div>
                 <span>
                   <span className="block font-medium">{copy.address}</span>
-                  <span className="text-sm text-muted-foreground">Pangandaran, West Java, Indonesia</span>
+                  <span className="text-sm text-muted-foreground">Bandung, West Java, Indonesia</span>
                 </span>
               </div>
             </div>
