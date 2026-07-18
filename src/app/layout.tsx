@@ -18,13 +18,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nusantaraharvest.example"),
+  metadataBase: new URL("https://export-import-app.vercel.app"),
   title: {
-    default: "Nusantara Harvest Co. | Indonesian Export Commodities",
-    template: "%s | Nusantara Harvest Co.",
+    default: "CO EXPORT.ID | Global Logistics & Trade",
+    template: "%s | CO EXPORT.ID",
   },
   description:
-    "B2B export storefront for Indonesian seaweed, cocoa, coconut, coffee, and agricultural commodities.",
+    "B2B export catalog for coco peat, coco fiber, legal wood, Sumedang sweet potato, and young areca nut from Indonesia.",
 };
 
 export default function RootLayout({

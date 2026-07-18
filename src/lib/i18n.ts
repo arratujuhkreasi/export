@@ -5,6 +5,7 @@ export type Locale = (typeof locales)[number];
 export type Localized<T = string> = Record<Locale, T>;
 
 export const defaultLocale: Locale = "en";
+export const brandName = "CO EXPORT.ID";
 
 export function resolveLocale(value?: string | string[]): Locale {
   const candidate = Array.isArray(value) ? value[0] : value;
@@ -31,68 +32,81 @@ export const ui = {
     },
     footer: {
       description:
-        "B2B export storefront for Indonesian marine and agricultural commodities, built for traceable sourcing, clear specifications, and global-ready documentation.",
+        "Global logistics and trade partner for Indonesian natural commodities, with export catalog, buyer education, and documentation-ready sourcing.",
       navigation: "Navigation",
       salesDesk: "Sales Desk",
       whatsapp: "WhatsApp Export Sales",
       copyright:
-        "(c) 2026 Nusantara Harvest Co. Dummy brand and sample product data for PRD implementation.",
+        "(c) 2026 CO EXPORT.ID. Product catalog prices are indicative and subject to final quotation.",
     },
     home: {
       metrics: [
-        { metric: "12+", label: "export-ready dummy SKUs" },
-        { metric: "18", label: "common export documents mapped" },
-        { metric: "Global", label: "FOB, CNF, and trial shipment support" },
+        { metric: "5", label: "priority export commodity lines" },
+        { metric: "FOB", label: "indicative export price catalog" },
+        { metric: "ID/EN", label: "bilingual buyer-facing content" },
       ],
       featuredEyebrow: "Featured products",
-      featuredTitle: "Commodity lines prepared for B2B conversations.",
+      featuredTitle: "Commodity lines from Indonesian origins, prepared for export inquiry.",
       viewCatalog: "View Catalog",
-      insightsEyebrow: "Insights",
-      insightsTitle: "Buyer education for commodity sourcing.",
+      insightsEyebrow: "Product knowledge",
+      insightsTitle: "Buyer education before quotation and trial shipment.",
       readInsights: "Read Insights",
     },
     hero: {
-      badge: "Traceable Indonesian commodities",
-      title: "Bringing Indonesia's harvest to the world",
+      badge: "Global logistics and trade",
+      title: "Connecting Indonesian Commodities to Global Buyers",
       description:
-        "Export-ready seaweed, cocoa, coconut, and coffee for importers that need clear specifications, dependable sourcing, and documentation before shipment.",
-      primaryCta: "Explore Products",
-      secondaryCta: "Start B2B Inquiry",
-      imageAlt: "Indonesian agricultural field prepared for export sourcing",
+        "Premium export-ready natural resources with transparent FOB pricing and complete documentation.",
+      primaryCta: "Explore Catalog",
+      secondaryCta: "Start Export Inquiry",
+      imageAlt: "CO EXPORT.ID commodity export sourcing from Indonesia",
     },
     features: {
       eyebrow: "Why us",
-      title: "Built for buyers who need clarity before committing volume.",
+      title: "Built for buyers who need product clarity before committing volume.",
       items: [
         {
-          title: "Quality-First Sourcing",
+          title: "Origin-Based Sourcing",
           description:
-            "Supplier batches are aligned against buyer specifications before quotation and loading.",
+            "Products are structured by Indonesian origin, including Pangandaran, Sumedang, and Aceh supply programs.",
         },
         {
-          title: "Sustainable Partnerships",
+          title: "Export Price Catalog",
           description:
-            "Dummy supply programs are framed around farmer groups, coastal communities, and long-term sourcing discipline.",
+            "Each product includes indicative FOB pricing, MOQ, lead time, HS code, packing, and quotation notes.",
         },
         {
-          title: "Global-Ready Compliance",
+          title: "Documentation Ready",
           description:
-            "Each commodity page lists export documents commonly requested by importers and freight partners.",
+            "Product pages map common export documents, compliance notes, and quality control checkpoints.",
         },
       ],
     },
     products: {
       title: "Products",
-      description: "Export commodity catalog for Indonesian seaweed, cocoa, coconut, and coffee.",
-      pageTitle: "Export commodity catalog",
+      description: "CO EXPORT.ID catalog for coco peat, coco fiber, legal wood, Sumedang sweet potato, and young areca nut.",
+      pageTitle: "Export catalog with indicative FOB prices",
       pageDescription:
-        "Dummy product lines built from the PRD structure: each item includes origin, technical specifications, applications, and export document availability.",
+        "Browse product knowledge, origin details, specifications, documents, MOQ, and indicative export price ranges. Final price requires buyer specification and destination review.",
       viewDetails: "View Details",
       back: "Back to Products",
       origin: "Origin",
       exportDocuments: "Export Documents",
       applications: "Applications",
       requestQuote: "Request Quote",
+      productKnowledge: "Product Knowledge",
+      qualityControl: "Quality Control",
+      catalog: "Export Catalog",
+      catalogNote: "Quotation Note",
+      priceRange: "Indicative Price",
+      minOrder: "Minimum Order",
+      incoterm: "Trade Term",
+      leadTime: "Lead Time",
+      hsCode: "HS Code",
+      supplyCapacity: "Supply Capacity",
+      tableTitle: "Indicative export price catalog",
+      tableDescription:
+        "Prices are planning references, not binding offers. Confirm grade, destination, documents, and logistics before purchase order.",
       specs: {
         grade: "Grade",
         moisture: "Moisture",
@@ -102,48 +116,48 @@ export const ui = {
     },
     about: {
       title: "Our Company",
-      description: "About Nusantara Harvest Co. and its dummy Indonesian export supply chain.",
+      description: "About CO EXPORT.ID and its Indonesian commodity export supply chain.",
       eyebrow: "Our company",
-      pageTitle: "A dummy export brand shaped for real B2B workflows.",
+      pageTitle: "Global logistics and trade for Indonesian natural commodities.",
       pageDescription:
-        "Nusantara Harvest Co. is a sample brand for the PRD: a professional export company website focused on seaweed and Indonesian agricultural commodities.",
-      imageAlt: "Farmers working with agricultural produce",
+        "CO EXPORT.ID is built as a buyer-facing export company website for coconut derivatives, legal timber, fresh produce, and plantation commodities from selected Indonesian origins.",
+      imageAlt: "CO EXPORT.ID company logo and Indonesian export brand identity",
       values: [
         {
           title: "Mission",
           description:
-            "Connect reliable Indonesian producer groups with international buyers through transparent specifications and disciplined export execution.",
+            "Connect Indonesian producers with international buyers through transparent specifications, indicative pricing, and disciplined export execution.",
         },
         {
           title: "Vision",
           description:
-            "Become a trusted digital-first export partner for natural commodities from coastal and farming regions across Indonesia.",
+            "Become a trusted digital-first trade partner for natural commodities from West Java, Aceh, and wider Indonesian production regions.",
         },
         {
           title: "Partnerships",
           description:
-            "Represent farmer, processor, and warehouse relationships with clear expectations for quality, timing, and documentation.",
+            "Coordinate producers, processors, warehouses, freight partners, and buyers with clear expectations for quality, timing, and documents.",
         },
       ],
       integrityTitle: "Supply chain integrity",
       integrityDescription:
-        "The site structure is ready for a future Supabase or Sanity CMS. Product pages separate origin, specification, application, and export document data so the sales team can update buyer-facing content without rebuilding the codebase.",
+        "The product catalog separates origin, price assumptions, specification, application, product knowledge, quality control, and export documents so sales teams can discuss each buyer inquiry with more precision.",
     },
     insights: {
       title: "Insights",
-      description: "Educational export sourcing articles for B2B commodity buyers.",
-      pageTitle: "B2B sourcing articles for global buyers",
+      description: "Product knowledge articles for B2B commodity buyers.",
+      pageTitle: "Product knowledge for export buyers",
       pageDescription:
-        "SEO-ready dummy articles covering commodity applications, export preparation, and importer due diligence.",
+        "Bilingual buyer education covering coconut derivatives, legal timber, fresh produce, and export readiness.",
       readArticle: "Read Article",
       back: "Back to Insights",
     },
     contact: {
       title: "Contact",
-      description: "Send a B2B export inquiry to Nusantara Harvest Co.",
+      description: "Send a B2B export inquiry to CO EXPORT.ID.",
       pageTitle: "Start a B2B export inquiry",
       pageDescription:
-        "Share product interest, destination market, target quantity, and timeline. The form is wired for an n8n webhook through NEXT_PUBLIC_N8N_WEBHOOK_URL.",
+        "Share product interest, destination market, target quantity, specification, and timeline. The form is wired for an n8n webhook through NEXT_PUBLIC_N8N_WEBHOOK_URL.",
       email: "Email",
       whatsapp: "WhatsApp",
       address: "Address",
@@ -155,8 +169,8 @@ export const ui = {
         message: "Message",
       },
       placeholders: {
-        productInterest: "Dried eucheuma seaweed, cocoa beans, coconut...",
-        message: "Target quantity, destination port, specification, and shipment timeline",
+        productInterest: "Coco peat, coco fiber, legal wood, Sumedang sweet potato, young areca nut...",
+        message: "Target quantity, destination port, specification, Incoterm, document needs, and shipment timeline",
       },
       required: {
         name: "Name is required",
@@ -170,7 +184,7 @@ export const ui = {
       successWebhook: "Inquiry sent to sales workflow.",
       successDemo:
         "Inquiry captured in demo mode. Add NEXT_PUBLIC_N8N_WEBHOOK_URL to enable n8n.",
-      error: "Inquiry could not be sent. Please email sales@nusantaraharvest.example.",
+      error: "Inquiry could not be sent. Please email sales@coexport.id.",
     },
   },
   id: {
@@ -185,68 +199,81 @@ export const ui = {
     },
     footer: {
       description:
-        "Etalase ekspor B2B untuk komoditas laut dan hasil bumi Indonesia, dirancang untuk sumber pasok terlacak, spesifikasi jelas, dan dokumentasi siap ekspor.",
+        "Mitra global logistics and trade untuk komoditas natural Indonesia, dengan katalog ekspor, edukasi pembeli, dan sourcing siap dokumen.",
       navigation: "Navigasi",
       salesDesk: "Tim Penjualan",
       whatsapp: "WhatsApp Tim Ekspor",
       copyright:
-        "(c) 2026 Nusantara Harvest Co. Brand dummy dan data produk contoh untuk implementasi PRD.",
+        "(c) 2026 CO EXPORT.ID. Harga katalog produk bersifat indikatif dan mengikuti quotation final.",
     },
     home: {
       metrics: [
-        { metric: "12+", label: "SKU dummy siap ekspor" },
-        { metric: "18", label: "dokumen ekspor umum dipetakan" },
-        { metric: "Global", label: "dukungan FOB, CNF, dan trial shipment" },
+        { metric: "5", label: "lini komoditas ekspor prioritas" },
+        { metric: "FOB", label: "katalog harga ekspor indikatif" },
+        { metric: "ID/EN", label: "konten pembeli dua bahasa" },
       ],
       featuredEyebrow: "Produk unggulan",
-      featuredTitle: "Lini komoditas siap untuk diskusi B2B.",
+      featuredTitle: "Lini komoditas dari origin Indonesia, siap untuk inquiry ekspor.",
       viewCatalog: "Lihat Katalog",
-      insightsEyebrow: "Artikel",
-      insightsTitle: "Edukasi pembeli untuk sourcing komoditas.",
+      insightsEyebrow: "Product knowledge",
+      insightsTitle: "Edukasi pembeli sebelum quotation dan trial shipment.",
       readInsights: "Baca Artikel",
     },
     hero: {
-      badge: "Komoditas Indonesia yang terlacak",
-      title: "Membawa hasil bumi Indonesia ke pasar dunia",
+      badge: "Global logistics and trade",
+      title: "Menghubungkan Komoditas Indonesia ke Pembeli Global",
       description:
-        "Rumput laut, kakao, kelapa, dan kopi siap ekspor untuk importir yang membutuhkan spesifikasi jelas, pasokan tepercaya, dan dokumentasi sebelum pengiriman.",
-      primaryCta: "Lihat Produk",
-      secondaryCta: "Mulai Inquiry B2B",
-      imageAlt: "Lahan pertanian Indonesia untuk sumber pasok ekspor",
+        "Sumber daya alam premium siap ekspor dengan transparansi harga FOB dan kelengkapan dokumen.",
+      primaryCta: "Lihat Katalog",
+      secondaryCta: "Mulai Inquiry Ekspor",
+      imageAlt: "Sourcing komoditas ekspor Indonesia oleh CO EXPORT.ID",
     },
     features: {
       eyebrow: "Keunggulan",
-      title: "Dibangun untuk pembeli yang butuh kejelasan sebelum komitmen volume.",
+      title: "Dibangun untuk pembeli yang butuh kejelasan produk sebelum komitmen volume.",
       items: [
         {
-          title: "Sourcing Berbasis Kualitas",
+          title: "Sourcing Berbasis Origin",
           description:
-            "Setiap batch pemasok diselaraskan dengan spesifikasi pembeli sebelum penawaran dan loading.",
+            "Produk disusun berdasarkan origin Indonesia, termasuk program pasok Pangandaran, Sumedang, dan Aceh.",
         },
         {
-          title: "Kemitraan Berkelanjutan",
+          title: "Katalog Harga Ekspor",
           description:
-            "Program pasok dummy disusun di sekitar kelompok tani, komunitas pesisir, dan disiplin sourcing jangka panjang.",
+            "Setiap produk memuat harga FOB indikatif, MOQ, lead time, HS code, kemasan, dan catatan quotation.",
         },
         {
-          title: "Kepatuhan Siap Global",
+          title: "Dokumentasi Siap Ekspor",
           description:
-            "Setiap halaman komoditas mencantumkan dokumen ekspor yang umum diminta importir dan freight partner.",
+            "Halaman produk memetakan dokumen ekspor umum, catatan compliance, dan checkpoint quality control.",
         },
       ],
     },
     products: {
       title: "Produk",
-      description: "Katalog komoditas ekspor untuk rumput laut, kakao, kelapa, dan kopi Indonesia.",
-      pageTitle: "Katalog komoditas ekspor",
+      description: "Katalog CO EXPORT.ID untuk coco peat, coco fiber, kayu legal, ubi Sumedang, dan pinang muda.",
+      pageTitle: "Katalog ekspor dengan harga FOB indikatif",
       pageDescription:
-        "Lini produk dummy berdasarkan struktur PRD: setiap item memuat asal, spesifikasi teknis, aplikasi, dan ketersediaan dokumen ekspor.",
+        "Lihat product knowledge, detail origin, spesifikasi, dokumen, MOQ, dan rentang harga ekspor indikatif. Harga final membutuhkan spesifikasi pembeli dan review negara tujuan.",
       viewDetails: "Lihat Detail",
       back: "Kembali ke Produk",
       origin: "Asal",
       exportDocuments: "Dokumen Ekspor",
       applications: "Aplikasi",
       requestQuote: "Minta Penawaran",
+      productKnowledge: "Product Knowledge",
+      qualityControl: "Quality Control",
+      catalog: "Katalog Ekspor",
+      catalogNote: "Catatan Quotation",
+      priceRange: "Harga Indikatif",
+      minOrder: "Minimum Order",
+      incoterm: "Trade Term",
+      leadTime: "Lead Time",
+      hsCode: "HS Code",
+      supplyCapacity: "Kapasitas Pasok",
+      tableTitle: "Katalog harga ekspor indikatif",
+      tableDescription:
+        "Harga adalah referensi perencanaan, bukan penawaran mengikat. Konfirmasi grade, tujuan, dokumen, dan logistik sebelum purchase order.",
       specs: {
         grade: "Grade",
         moisture: "Kadar air",
@@ -256,48 +283,48 @@ export const ui = {
     },
     about: {
       title: "Perusahaan",
-      description: "Tentang Nusantara Harvest Co. dan rantai pasok ekspor dummy dari Indonesia.",
+      description: "Tentang CO EXPORT.ID dan rantai pasok ekspor komoditas Indonesia.",
       eyebrow: "Perusahaan",
-      pageTitle: "Brand ekspor dummy yang dibentuk untuk workflow B2B nyata.",
+      pageTitle: "Global logistics and trade untuk komoditas natural Indonesia.",
       pageDescription:
-        "Nusantara Harvest Co. adalah brand contoh untuk PRD: website perusahaan ekspor profesional yang berfokus pada rumput laut dan hasil bumi Indonesia.",
-      imageAlt: "Petani bekerja dengan hasil bumi",
+        "CO EXPORT.ID dibangun sebagai website perusahaan ekspor yang menghadap pembeli untuk produk turunan kelapa, kayu legal, fresh produce, dan komoditas perkebunan dari origin pilihan Indonesia.",
+      imageAlt: "Logo perusahaan CO EXPORT.ID dan identitas brand ekspor Indonesia",
       values: [
         {
           title: "Misi",
           description:
-            "Menghubungkan kelompok produsen Indonesia yang andal dengan pembeli internasional melalui spesifikasi transparan dan eksekusi ekspor yang disiplin.",
+            "Menghubungkan produsen Indonesia dengan pembeli internasional melalui spesifikasi transparan, harga indikatif, dan eksekusi ekspor yang disiplin.",
         },
         {
           title: "Visi",
           description:
-            "Menjadi mitra ekspor digital-first yang tepercaya untuk komoditas natural dari wilayah pesisir dan pertanian Indonesia.",
+            "Menjadi mitra perdagangan digital-first yang tepercaya untuk komoditas natural dari Jawa Barat, Aceh, dan wilayah produksi Indonesia lainnya.",
         },
         {
           title: "Kemitraan",
           description:
-            "Mewakili relasi petani, prosesor, dan gudang dengan ekspektasi yang jelas untuk kualitas, waktu, dan dokumentasi.",
+            "Mengoordinasikan produsen, prosesor, gudang, freight partner, dan pembeli dengan ekspektasi jelas untuk kualitas, waktu, dan dokumen.",
         },
       ],
       integrityTitle: "Integritas rantai pasok",
       integrityDescription:
-        "Struktur situs siap untuk CMS Supabase atau Sanity di masa depan. Halaman produk memisahkan data asal, spesifikasi, aplikasi, dan dokumen ekspor sehingga tim sales dapat memperbarui konten pembeli tanpa membangun ulang codebase.",
+        "Katalog produk memisahkan origin, asumsi harga, spesifikasi, aplikasi, product knowledge, quality control, dan dokumen ekspor agar tim sales dapat mendiskusikan setiap inquiry pembeli dengan lebih presisi.",
     },
     insights: {
       title: "Artikel",
-      description: "Artikel edukasi sourcing ekspor untuk pembeli komoditas B2B.",
-      pageTitle: "Artikel sourcing B2B untuk pembeli global",
+      description: "Artikel product knowledge untuk pembeli komoditas B2B.",
+      pageTitle: "Product knowledge untuk pembeli ekspor",
       pageDescription:
-        "Artikel dummy siap SEO yang membahas aplikasi komoditas, persiapan ekspor, dan due diligence importir.",
+        "Edukasi pembeli dua bahasa tentang turunan kelapa, kayu legal, fresh produce, dan kesiapan ekspor.",
       readArticle: "Baca Artikel",
       back: "Kembali ke Artikel",
     },
     contact: {
       title: "Kontak",
-      description: "Kirim inquiry ekspor B2B ke Nusantara Harvest Co.",
+      description: "Kirim inquiry ekspor B2B ke CO EXPORT.ID.",
       pageTitle: "Mulai inquiry ekspor B2B",
       pageDescription:
-        "Bagikan minat produk, pasar tujuan, target kuantitas, dan timeline. Form ini tersambung ke webhook n8n melalui NEXT_PUBLIC_N8N_WEBHOOK_URL.",
+        "Bagikan minat produk, pasar tujuan, target kuantitas, spesifikasi, dan timeline. Form ini tersambung ke webhook n8n melalui NEXT_PUBLIC_N8N_WEBHOOK_URL.",
       email: "Email",
       whatsapp: "WhatsApp",
       address: "Alamat",
@@ -309,8 +336,8 @@ export const ui = {
         message: "Pesan",
       },
       placeholders: {
-        productInterest: "Rumput laut eucheuma, biji kakao, kelapa...",
-        message: "Target kuantitas, pelabuhan tujuan, spesifikasi, dan timeline pengiriman",
+        productInterest: "Coco peat, coco fiber, kayu legal, ubi Sumedang, pinang muda...",
+        message: "Target kuantitas, pelabuhan tujuan, spesifikasi, Incoterm, kebutuhan dokumen, dan timeline pengiriman",
       },
       required: {
         name: "Nama wajib diisi",
@@ -324,7 +351,7 @@ export const ui = {
       successWebhook: "Inquiry terkirim ke workflow sales.",
       successDemo:
         "Inquiry tersimpan dalam mode demo. Tambahkan NEXT_PUBLIC_N8N_WEBHOOK_URL untuk mengaktifkan n8n.",
-      error: "Inquiry tidak dapat dikirim. Silakan email sales@nusantaraharvest.example.",
+      error: "Inquiry tidak dapat dikirim. Silakan email sales@coexport.id.",
     },
   },
 } as const;

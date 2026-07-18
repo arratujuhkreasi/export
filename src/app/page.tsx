@@ -26,15 +26,17 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <>
       <HeroSection locale={locale} />
-      <section className="bg-background py-12">
+
+      {/* Metrics section */}
+      <section className="relative -mt-12 z-10 pb-8">
         <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
           {copy.metrics.map(({ metric, label }, index) => {
             const Icon = metricIcons[index];
 
             return (
-              <Reveal key={metric}>
-                <div className="flex items-center gap-4 rounded-lg border border-border bg-card p-5">
-                  <div className="flex size-11 items-center justify-center rounded-md bg-accent text-accent-foreground">
+              <Reveal key={metric} delay={index * 0.08}>
+                <div className="gradient-border card-lift group flex items-center gap-4 rounded-xl border border-border/50 bg-white p-5 shadow-lg shadow-black/[0.04]">
+                  <div className="flex size-12 items-center justify-center rounded-lg bg-gradient-to-br from-[#d7eadf] to-[#eef6f2] text-[#174f3b] shadow-sm transition-transform duration-500 group-hover:scale-110">
                     <Icon className="size-5" aria-hidden="true" />
                   </div>
                   <div>
@@ -47,21 +49,28 @@ export default async function Home({ searchParams }: HomeProps) {
           })}
         </div>
       </section>
+
+      {/* Features */}
       <FeatureGrid locale={locale} />
+
+      {/* Featured products */}
       <section className="bg-background py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <Reveal>
               <div className="max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1d6b4f]">{copy.featuredEyebrow}</p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em]">
+                  <span className="inline-block h-px w-8 bg-gradient-to-r from-[#1d6b4f] to-[#2a9d6f]" aria-hidden="true" />
+                  <span className="gradient-text">{copy.featuredEyebrow}</span>
+                </p>
+                <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
                   {copy.featuredTitle}
                 </h2>
               </div>
             </Reveal>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="group border-border/60 transition-all duration-300 hover:border-[#1d6b4f]/30 hover:bg-[#eef6f2]">
               <Link href={hrefWithLocale("/products", locale)}>
-                {copy.viewCatalog} <ArrowRight className="size-4" aria-hidden="true" />
+                {copy.viewCatalog} <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </Button>
           </div>
@@ -74,20 +83,33 @@ export default async function Home({ searchParams }: HomeProps) {
           </div>
         </div>
       </section>
-      <section className="bg-[#eef6f2] py-20">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+
+      {/* Insights */}
+      <section className="relative overflow-hidden bg-[#eef6f2] py-20">
+        {/* Subtle mesh gradient */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(ellipse 50% 60% at 70% 20%, rgba(29,107,79,0.06), transparent), radial-gradient(ellipse 40% 50% at 20% 80%, rgba(196,163,90,0.04), transparent)",
+          }}
+        />
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <Reveal>
               <div className="max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1d6b4f]">{copy.insightsEyebrow}</p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em]">
+                  <span className="inline-block h-px w-8 bg-gradient-to-r from-[#1d6b4f] to-[#2a9d6f]" aria-hidden="true" />
+                  <span className="gradient-text">{copy.insightsEyebrow}</span>
+                </p>
+                <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
                   {copy.insightsTitle}
                 </h2>
               </div>
             </Reveal>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="group border-border/60 bg-white/60 transition-all duration-300 hover:border-[#1d6b4f]/30 hover:bg-white">
               <Link href={hrefWithLocale("/insights", locale)}>
-                {copy.readInsights} <ArrowRight className="size-4" aria-hidden="true" />
+                {copy.readInsights} <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </Button>
           </div>

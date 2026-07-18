@@ -9,7 +9,7 @@ import { resolveLocale, ui } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Send a B2B export inquiry to Nusantara Harvest Co.",
+  description: "Send a B2B export inquiry to CO EXPORT.ID.",
 };
 
 type ContactPageProps = {
@@ -33,32 +33,44 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
               description={copy.pageDescription}
             />
             <div className="mt-8 grid gap-4">
-              <a href="mailto:sales@nusantaraharvest.example" className="flex gap-3 rounded-lg border border-border bg-card p-4 hover:bg-muted/60">
-                <Mail className="mt-0.5 size-5 text-[#1d6b4f]" aria-hidden="true" />
+              <a
+                href="mailto:sales@coexport.id"
+                className="card-lift group flex gap-3 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-colors duration-200 hover:bg-[#eef6f2]"
+              >
+                <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#d7eadf] to-[#eef6f2] transition-transform duration-300 group-hover:scale-110">
+                  <Mail className="size-4 text-[#1d6b4f]" aria-hidden="true" />
+                </div>
                 <span>
                   <span className="block font-medium">{copy.email}</span>
-                  <span className="text-sm text-muted-foreground">sales@nusantaraharvest.example</span>
+                  <span className="text-sm text-muted-foreground">sales@coexport.id</span>
                 </span>
               </a>
-              <a href="https://wa.me/6281234567890" className="flex gap-3 rounded-lg border border-border bg-card p-4 hover:bg-muted/60">
-                <MessageCircle className="mt-0.5 size-5 text-[#1d6b4f]" aria-hidden="true" />
+              <a
+                href="https://wa.me/6281234567890"
+                className="card-lift group flex gap-3 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-colors duration-200 hover:bg-[#eef6f2]"
+              >
+                <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#d7eadf] to-[#eef6f2] transition-transform duration-300 group-hover:scale-110">
+                  <MessageCircle className="size-4 text-[#1d6b4f]" aria-hidden="true" />
+                </div>
                 <span>
                   <span className="block font-medium">{copy.whatsapp}</span>
                   <span className="text-sm text-muted-foreground">+62 812 3456 7890</span>
                 </span>
               </a>
-              <div className="flex gap-3 rounded-lg border border-border bg-card p-4">
-                <MapPin className="mt-0.5 size-5 text-[#1d6b4f]" aria-hidden="true" />
+              <div className="flex gap-3 rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#d7eadf] to-[#eef6f2]">
+                  <MapPin className="size-4 text-[#1d6b4f]" aria-hidden="true" />
+                </div>
                 <span>
                   <span className="block font-medium">{copy.address}</span>
-                  <span className="text-sm text-muted-foreground">Surabaya, East Java, Indonesia</span>
+                  <span className="text-sm text-muted-foreground">Pangandaran, West Java, Indonesia</span>
                 </span>
               </div>
             </div>
           </div>
         </Reveal>
         <Reveal delay={0.08}>
-          <div className="rounded-lg border border-border bg-card p-5 shadow-sm sm:p-6">
+          <div className="rounded-xl border border-border/60 bg-card p-5 shadow-lg shadow-black/[0.04] sm:p-6">
             <ContactForm defaultProductInterest={selectedProduct?.name} locale={locale} />
           </div>
         </Reveal>

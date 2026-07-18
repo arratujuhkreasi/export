@@ -55,7 +55,7 @@ export function ContactForm({
           body: JSON.stringify({
             ...values,
             language: locale,
-            source: "Nusantara Harvest Co. website",
+            source: "CO EXPORT.ID website",
             submittedAt: new Date().toISOString(),
           }),
         });
@@ -79,66 +79,86 @@ export function ContactForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5">
       <div className="grid gap-2">
-        <Label htmlFor="name">{copy.labels.name}</Label>
-        <Input
-          id="name"
-          autoComplete="name"
-          aria-invalid={Boolean(errors.name)}
-          {...register("name", { required: copy.required.name })}
-        />
+        <Label htmlFor="name" className="text-sm font-medium">{copy.labels.name}</Label>
+        <div className="focus-glow rounded-lg transition-all duration-300">
+          <Input
+            id="name"
+            autoComplete="name"
+            aria-invalid={Boolean(errors.name)}
+            className="border-border/60 transition-colors duration-200 focus:border-[#1d6b4f]"
+            {...register("name", { required: copy.required.name })}
+          />
+        </div>
         {errors.name ? <p className="text-sm text-destructive">{errors.name.message}</p> : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="company">{copy.labels.company}</Label>
-        <Input
-          id="company"
-          autoComplete="organization"
-          aria-invalid={Boolean(errors.company)}
-          {...register("company", { required: copy.required.company })}
-        />
+        <Label htmlFor="company" className="text-sm font-medium">{copy.labels.company}</Label>
+        <div className="focus-glow rounded-lg transition-all duration-300">
+          <Input
+            id="company"
+            autoComplete="organization"
+            aria-invalid={Boolean(errors.company)}
+            className="border-border/60 transition-colors duration-200 focus:border-[#1d6b4f]"
+            {...register("company", { required: copy.required.company })}
+          />
+        </div>
         {errors.company ? <p className="text-sm text-destructive">{errors.company.message}</p> : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="email">{copy.labels.email}</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          aria-invalid={Boolean(errors.email)}
-          {...register("email", {
-            required: copy.required.email,
-            pattern: {
-              value: /^\S+@\S+\.\S+$/,
-              message: copy.required.validEmail,
-            },
-          })}
-        />
+        <Label htmlFor="email" className="text-sm font-medium">{copy.labels.email}</Label>
+        <div className="focus-glow rounded-lg transition-all duration-300">
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            aria-invalid={Boolean(errors.email)}
+            className="border-border/60 transition-colors duration-200 focus:border-[#1d6b4f]"
+            {...register("email", {
+              required: copy.required.email,
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: copy.required.validEmail,
+              },
+            })}
+          />
+        </div>
         {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="productInterest">{copy.labels.productInterest}</Label>
-        <Input
-          id="productInterest"
-          placeholder={copy.placeholders.productInterest}
-          aria-invalid={Boolean(errors.productInterest)}
-          {...register("productInterest", { required: copy.required.productInterest })}
-        />
+        <Label htmlFor="productInterest" className="text-sm font-medium">{copy.labels.productInterest}</Label>
+        <div className="focus-glow rounded-lg transition-all duration-300">
+          <Input
+            id="productInterest"
+            placeholder={copy.placeholders.productInterest}
+            aria-invalid={Boolean(errors.productInterest)}
+            className="border-border/60 transition-colors duration-200 focus:border-[#1d6b4f]"
+            {...register("productInterest", { required: copy.required.productInterest })}
+          />
+        </div>
         {errors.productInterest ? (
           <p className="text-sm text-destructive">{errors.productInterest.message}</p>
         ) : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="message">{copy.labels.message}</Label>
-        <Textarea
-          id="message"
-          rows={5}
-          placeholder={copy.placeholders.message}
-          aria-invalid={Boolean(errors.message)}
-          {...register("message", { required: copy.required.message })}
-        />
+        <Label htmlFor="message" className="text-sm font-medium">{copy.labels.message}</Label>
+        <div className="focus-glow rounded-lg transition-all duration-300">
+          <Textarea
+            id="message"
+            rows={5}
+            placeholder={copy.placeholders.message}
+            aria-invalid={Boolean(errors.message)}
+            className="border-border/60 transition-colors duration-200 focus:border-[#1d6b4f]"
+            {...register("message", { required: copy.required.message })}
+          />
+        </div>
         {errors.message ? <p className="text-sm text-destructive">{errors.message.message}</p> : null}
       </div>
-      <Button type="submit" size="lg" disabled={isSubmitting} className="h-11">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={isSubmitting}
+        className="h-12 bg-[#1d6b4f] shadow-lg shadow-[#1d6b4f]/20 transition-all duration-300 hover:bg-[#174f3b] hover:shadow-xl hover:shadow-[#1d6b4f]/25 active:scale-[0.98]"
+      >
         {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Send className="size-4" aria-hidden="true" />}
         {copy.submit}
       </Button>

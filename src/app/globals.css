@@ -81,6 +81,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Premium brand tokens */
+  --brand-green: #1d6b4f;
+  --brand-green-light: #2a9d6f;
+  --brand-green-dark: #143421;
+  --brand-gold: #c4a35a;
+  --brand-cream: #faf8f5;
 }
 
 .dark {
@@ -117,6 +124,44 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ─── Premium keyframes ──────────────────────────────── */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes subtle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes slide-up-fade {
+  0% { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -125,6 +170,116 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply scroll-smooth font-sans;
+  }
+
+  /* Premium selection color */
+  ::selection {
+    background: rgba(29, 107, 79, 0.18);
+    color: inherit;
+  }
+}
+
+@layer utilities {
+  .logo-dark img {
+    mix-blend-mode: multiply;
+  }
+  .logo-light img {
+    filter: invert(1) brightness(2);
+    mix-blend-mode: screen;
+  }
+}
+
+/* ─── Premium utilities ──────────────────────────────── */
+
+@layer utilities {
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  }
+
+  /* Shimmer badge effect */
+  .shimmer-bg {
+    background: linear-gradient(
+      110deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.12) 40%,
+      rgba(255, 255, 255, 0.24) 50%,
+      rgba(255, 255, 255, 0.12) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  /* Gradient border utility (Safe fallback) */
+  .gradient-border {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .gradient-border:hover {
+    border-color: #2a9d6f;
+    box-shadow: 0 0 20px -5px rgba(42, 157, 111, 0.3);
+  }
+
+  /* Premium card lift */
+  .card-lift {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 20px 40px -12px rgba(29, 107, 79, 0.12),
+      0 8px 16px -8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Dot pattern background */
+  .dot-pattern {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Animated gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #1d6b4f 0%, #2a9d6f 50%, #1d6b4f 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 4s ease-in-out infinite;
+  }
+
+  /* Animated underline for links */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #1d6b4f, #2a9d6f);
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 1px;
+  }
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Gradient divider line */
+  .divider-gradient {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(29, 107, 79, 0.3), rgba(196, 163, 90, 0.2), transparent);
+  }
+
+  /* Focus ring glow */
+  .focus-glow:focus-within {
+    box-shadow: 0 0 0 3px rgba(29, 107, 79, 0.15), 0 0 12px rgba(29, 107, 79, 0.08);
+    border-color: #1d6b4f;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
 }
