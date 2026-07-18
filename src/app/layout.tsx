@@ -7,6 +7,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
 
+import { Chatbot } from "@/components/chatbot";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -46,6 +48,7 @@ export default function RootLayout({
           <SiteFooter />
         </Suspense>
         <Toaster richColors position="bottom-right" />
+        <Chatbot />
       </body>
     </html>
   );
