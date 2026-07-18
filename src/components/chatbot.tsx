@@ -8,8 +8,65 @@ import ReactMarkdown from "react-markdown";
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
+  const [input, setInput] = useState("");
+  
+  const [messages, setMessages] = useState<Array<{id: string, role: string, content: string}>>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    
+    const userMessage = { id: Date.now().toString(), role: "user", content: input };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages })
+      });
+
+      if (!response.ok) throw new Error(response.statusText);
+      const reader = response.body?.getReader();
+      if (!reader) return;
+
+      const decoder = new TextDecoder();
+      let assistantMessage = "";
+      const assistantId = (Date.now() + 1).toString();
+
+      setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        assistantMessage += chunk;
+        
+        setMessages(prev => {
+          const updated = [...prev];
+          const lastIndex = updated.length - 1;
+          if (updated[lastIndex].role === "assistant") {
+            updated[lastIndex].content = assistantMessage;
+          }
+          return updated;
+        });
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,7 +110,7 @@ export function Chatbot() {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {messages.map((m) => (
+                {messages?.map((m: any) => (
                   <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className="flex max-w-[85%] items-end gap-2">
                       {m.role === "assistant" && (
@@ -69,7 +126,7 @@ export function Chatbot() {
                         }`}
                       >
                         <div className="[&>p]:mb-2 last:[&>p]:mb-0 [&>ul]:list-disc [&>ul]:ml-4 [&>ul]:mb-2 [&>strong]:font-bold">
-                          <ReactMarkdown>{m.content}</ReactMarkdown>
+                          <ReactMarkdown>{(m as any).content || (m as any).text || ""}</ReactMarkdown>
                         </div>
                       </div>
                     </div>

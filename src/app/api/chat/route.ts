@@ -4,10 +4,12 @@ import { getProducts } from '@/lib/cms';
 
 export const maxDuration = 30;
 
-// Configure Cerebras using the OpenAI SDK adapter
+// Configure Cerebras using the OpenAI SDK adapter with compatible mode
 const cerebras = createOpenAI({
   baseURL: 'https://api.cerebras.ai/v1',
-  apiKey: process.env.CEREBRAS_API_KEY || 'csk-yje4v8y62h35drc4hkvjt6wnkewjwxtfy4dvwjhym96f8nnf',
+  apiKey: process.env.CEREBRAS_API_KEY,
+  // @ts-ignore
+  compatibility: 'compatible',
 });
 
 export async function POST(req: Request) {
@@ -50,10 +52,10 @@ STRICT INSTRUCTIONS & BOUNDARIES:
   `;
 
   const result = streamText({
-    model: cerebras('llama3.1-8b'),
+    model: cerebras.chat('gpt-oss-120b'),
     system: systemPrompt,
     messages,
   });
 
-  return result.toDataStreamResponse();
+  return result.toTextStreamResponse();
 }
