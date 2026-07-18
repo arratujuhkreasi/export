@@ -162,7 +162,7 @@ export default async function PartnershipPage({ searchParams }: PartnershipPageP
                 </p>
                 <div className="mt-8">
                   <Button asChild size="lg" className="h-14 rounded-full px-8 text-base font-semibold shadow-lg transition-transform hover:scale-105 active:scale-95">
-                    <Link href={hrefWithLocale("/contact?subject=supplier", locale)}>
+                    <Link href={hrefWithLocale("/partnership/apply", locale)}>
                       {copy.ctaButton} <ArrowRight className="ml-2 size-5" />
                     </Link>
                   </Button>
