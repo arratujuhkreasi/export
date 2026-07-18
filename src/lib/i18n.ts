@@ -92,6 +92,16 @@ export const ui = {
       eyebrow: "Join Our Network",
       title: "Become a Supply Partner (Mitra Daerah)",
       description: "We are actively seeking local farmers and regional coordinators across Indonesia to supply export-quality commodities.",
+      onboardingEyebrow: "How It Works",
+      onboardingTitle: "Your Journey to Becoming an Export Partner",
+      onboardingSteps: [
+        { title: "Online Registration", description: "Fill out the partner application form with your commodity type, location, production capacity, and product photos." },
+        { title: "Verification & Selection", description: "Our team reviews your application. If you meet the basic criteria, we'll contact you via WhatsApp or phone." },
+        { title: "Field Visit", description: "Our sourcing team visits your farm or warehouse to verify quality standards and production capacity on-site." },
+        { title: "MoU Signing", description: "Both parties sign the Partnership Agreement covering pricing, DP terms, quality commitments, and supply schedule." },
+        { title: "Trial Shipment", description: "You send the first batch for final QC inspection. If it passes, you become an officially active partner." },
+        { title: "Active Supply", description: "Begin regular supply according to the agreed schedule and volume. Payments are settled per the MoU terms." }
+      ],
       sopTitle: "Standard Operating Procedure (SOP) & Quality Control",
       sopDescription: "To maintain our international reputation, all partners must adhere to strict quality standards.",
       sopSteps: [
@@ -305,6 +315,16 @@ export const ui = {
       eyebrow: "Bergabung Bersama Kami",
       title: "Menjadi Mitra Penyedia Komoditas",
       description: "Kami secara aktif mencari petani lokal dan koordinator daerah di seluruh Indonesia untuk menyuplai komoditas kualitas ekspor.",
+      onboardingEyebrow: "Alur Pendaftaran",
+      onboardingTitle: "Perjalanan Anda Menjadi Mitra Ekspor",
+      onboardingSteps: [
+        { title: "Pendaftaran Online", description: "Isi formulir pendaftaran mitra dengan jenis komoditas, lokasi, kapasitas produksi, dan foto produk Anda." },
+        { title: "Verifikasi & Seleksi", description: "Tim kami meninjau data Anda. Jika memenuhi kriteria dasar, kami akan menghubungi via WhatsApp atau telepon." },
+        { title: "Kunjungan Lapangan", description: "Tim sourcing kami mengunjungi lokasi panen/gudang untuk memverifikasi standar kualitas dan kapasitas produksi." },
+        { title: "Penandatanganan MoU", description: "Kedua pihak menandatangani Surat Perjanjian Kerjasama yang mencakup harga, sistem DP, komitmen mutu, dan jadwal pasok." },
+        { title: "Trial Shipment", description: "Anda mengirimkan batch pertama untuk inspeksi QC final. Jika lolos, Anda resmi menjadi mitra aktif." },
+        { title: "Pasok Aktif", description: "Mulai menyuplai secara rutin sesuai jadwal dan volume yang disepakati. Pembayaran dilakukan sesuai ketentuan MoU." }
+      ],
       sopTitle: "Standar Operasional Prosedur (SOP) & Quality Control",
       sopDescription: "Untuk menjaga reputasi internasional, seluruh mitra wajib mematuhi standar kualitas ketat berikut:",
       sopSteps: [

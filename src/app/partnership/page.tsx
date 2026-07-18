@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, FileText, Leaf, Package, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, ClipboardList, Eye, FileSignature, FileText, Leaf, MapPin, Package, ShieldCheck, Truck, Zap } from "lucide-react";
 
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 const sopIcons = [Leaf, CheckCircle2, Package, Package, ShieldCheck] as const;
+const onboardingIcons = [ClipboardList, Eye, MapPin, FileSignature, Truck, Zap] as const;
 
 type PartnershipPageProps = {
   searchParams: Promise<{ lang?: string | string[] }>;
@@ -50,7 +51,53 @@ export default async function PartnershipPage({ searchParams }: PartnershipPageP
         </div>
       </section>
 
+      {/* Onboarding Steps */}
       <section className="bg-white py-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em]">
+                <span className="inline-block h-px w-8 bg-gradient-to-r from-[#1d6b4f] to-[#2a9d6f]" aria-hidden="true" />
+                <span className="gradient-text">{copy.onboardingEyebrow}</span>
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                {copy.onboardingTitle}
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="mt-16 grid gap-0 md:grid-cols-6">
+            {copy.onboardingSteps.map((step, index) => {
+              const Icon = onboardingIcons[index];
+              const stepNumber = index + 1;
+
+              return (
+                <Reveal key={step.title} delay={index * 0.1} className="relative">
+                  <div className="group flex flex-col items-center text-center px-2">
+                    {/* Step number badge */}
+                    <div className="relative">
+                      <div className="flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1d6b4f] to-[#2a9d6f] text-white shadow-lg transition-transform duration-500 group-hover:scale-110">
+                        <Icon className="size-7" aria-hidden="true" />
+                      </div>
+                      <span className="absolute -right-1 -top-1 flex size-6 items-center justify-center rounded-full bg-[#c4a35a] text-xs font-bold text-white shadow-md">
+                        {stepNumber}
+                      </span>
+                    </div>
+                    {/* Connector line (hidden on mobile, visible on md+) */}
+                    {index < copy.onboardingSteps.length - 1 && (
+                      <div className="absolute left-[60%] top-8 -z-10 hidden h-[2px] w-[calc(100%-20%)] bg-gradient-to-r from-[#1d6b4f]/30 to-[#1d6b4f]/10 md:block" />
+                    )}
+                    <h3 className="mt-5 text-sm font-bold leading-tight">{step.title}</h3>
+                    <p className="mt-2 text-xs leading-5 text-muted-foreground">{step.description}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#faf8f5] py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <SectionHeading
