@@ -70,7 +70,7 @@ export function SiteFooter() {
           <h2 className="text-sm font-semibold text-white">{copy.footer.salesDesk}</h2>
           <div className="mt-4 grid gap-3 text-sm text-white/55">
             <span className="flex gap-2">
-              <MapPin className="mt-0.5 size-4 text-emerald-400/60" aria-hidden="true" /> Pangandaran, West Java, Indonesia
+              <MapPin className="mt-0.5 size-4 text-emerald-400/60" aria-hidden="true" /> Bandung, West Java, Indonesia
             </span>
             <a href="mailto:sales@coexport.id" className="flex gap-2 transition-colors duration-200 hover:text-white">
               <Mail className="mt-0.5 size-4 text-emerald-400/60" aria-hidden="true" /> sales@coexport.id
