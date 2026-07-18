@@ -58,6 +58,9 @@ export function SiteFooter() {
             <Link href={localizedHref("/about")} className="link-underline inline-block w-fit text-white/55 transition-colors duration-200 hover:text-white">
               {copy.nav.company}
             </Link>
+            <Link href={localizedHref("/partnership")} className="link-underline inline-block w-fit text-white/55 transition-colors duration-200 hover:text-white">
+              {copy.nav.partnership}
+            </Link>
             <Link href={localizedHref("/insights")} className="link-underline inline-block w-fit text-white/55 transition-colors duration-200 hover:text-white">
               {copy.nav.insights}
             </Link>

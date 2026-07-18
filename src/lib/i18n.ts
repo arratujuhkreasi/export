@@ -25,6 +25,7 @@ export const ui = {
       home: "Home",
       products: "Products",
       company: "Our Company",
+      partnership: "Become a Partner",
       insights: "Insights",
       contact: "Contact",
       quote: "Request Quote",
@@ -60,6 +61,51 @@ export const ui = {
       primaryCta: "Explore Catalog",
       secondaryCta: "Start Export Inquiry",
       imageAlt: "CO EXPORT.ID commodity export sourcing from Indonesia",
+    },
+    howToOrder: {
+      eyebrow: "Export Process",
+      title: "Secure & Transparent Export Journey",
+      steps: [
+        {
+          title: "Inquiry & Requirement",
+          description: "Submit your desired specifications, volume, and target port. Our sales desk will verify capacity."
+        },
+        {
+          title: "Quotation & Sample",
+          description: "Receive a formal indicative FOB/CIF quotation. Trial samples can be arranged upon request."
+        },
+        {
+          title: "Contract & Deposit",
+          description: "Sign the Sales Contract (MoU) and secure your production schedule with the agreed deposit."
+        },
+        {
+          title: "Production & QC",
+          description: "We harvest, grade, and package strictly according to export SOP. Final QC is performed before stuffing."
+        },
+        {
+          title: "Shipment & Documents",
+          description: "Container is shipped. Original Bill of Lading, Phytosanitary, and Invoice are provided upon final payment."
+        }
+      ]
+    },
+    partnership: {
+      eyebrow: "Join Our Network",
+      title: "Become a Supply Partner (Mitra Daerah)",
+      description: "We are actively seeking local farmers and regional coordinators across Indonesia to supply export-quality commodities.",
+      sopTitle: "Standard Operating Procedure (SOP) & Quality Control",
+      sopDescription: "To maintain our international reputation, all partners must adhere to strict quality standards.",
+      sopSteps: [
+        { title: "Harvesting", description: "Harvest at the exact maturity stage. Avoid contamination with soil or chemicals." },
+        { title: "First Grading", description: "Sort by size/grade. Remove defective, moldy, or rotten items. Ensure strict moisture control." },
+        { title: "Storage", description: "Use wooden pallets (no direct floor contact). Keep in dry, shaded, and well-ventilated areas." },
+        { title: "Packaging", description: "Use clean gunny or mesh bags. Label clearly with commodity type and coordinator name." },
+        { title: "Final Inspection", description: "Co Export.ID performs random sampling before container loading. Strict rejection limits apply." }
+      ],
+      mouTitle: "Partnership Agreement (MoU)",
+      mouDescription: "Our partnership is formalized through an MoU guaranteeing fair prices, clear payment terms (DP & Settlement), and mutual commitment to quality.",
+      ctaTitle: "Ready to Export Your Harvest?",
+      ctaDescription: "Register your commodity and production capacity to start the verification process.",
+      ctaButton: "Register as Partner",
     },
     features: {
       eyebrow: "Why us",
@@ -191,7 +237,8 @@ export const ui = {
     nav: {
       home: "Beranda",
       products: "Produk",
-      company: "Perusahaan",
+      company: "Perusahaan Kami",
+      partnership: "Mitra Kami",
       insights: "Artikel",
       contact: "Kontak",
       quote: "Minta Penawaran",
@@ -220,13 +267,58 @@ export const ui = {
       readInsights: "Baca Artikel",
     },
     hero: {
-      badge: "Global logistics and trade",
+      badge: "Logistik dan perdagangan global",
       title: "Menghubungkan Komoditas Indonesia ke Pembeli Global",
       description:
-        "Sumber daya alam premium siap ekspor dengan transparansi harga FOB dan kelengkapan dokumen.",
-      primaryCta: "Lihat Katalog",
-      secondaryCta: "Mulai Inquiry Ekspor",
-      imageAlt: "Sourcing komoditas ekspor Indonesia oleh CO EXPORT.ID",
+        "Sumber daya alam siap ekspor premium dengan harga FOB transparan dan dokumentasi lengkap.",
+      primaryCta: "Jelajahi Katalog",
+      secondaryCta: "Mulai Inkuiri Ekspor",
+      imageAlt: "CO EXPORT.ID komoditas ekspor dari Indonesia",
+    },
+    howToOrder: {
+      eyebrow: "Proses Ekspor",
+      title: "Alur Transaksi yang Aman & Transparan",
+      steps: [
+        {
+          title: "Inkuiri & Persyaratan",
+          description: "Kirimkan spesifikasi, volume, dan pelabuhan tujuan yang Anda butuhkan. Tim sales kami akan memverifikasi kapasitas produksi."
+        },
+        {
+          title: "Kutipan Harga & Sampel",
+          description: "Terima kutipan harga indikatif FOB/CIF resmi. Sampel uji coba dapat diatur sesuai permintaan."
+        },
+        {
+          title: "Kontrak & Deposit",
+          description: "Tandatangani Kontrak Penjualan (MoU) dan amankan jadwal produksi Anda dengan deposit yang disepakati."
+        },
+        {
+          title: "Produksi & QC",
+          description: "Kami memanen, menyortir, dan mengemas secara ketat sesuai SOP ekspor. QC final dilakukan sebelum pemuatan."
+        },
+        {
+          title: "Pengiriman & Dokumen",
+          description: "Kontainer dikirim. Bill of Lading Asli, Phytosanitary, dan Invoice diserahkan setelah pelunasan."
+        }
+      ]
+    },
+    partnership: {
+      eyebrow: "Bergabung Bersama Kami",
+      title: "Menjadi Mitra Penyedia Komoditas",
+      description: "Kami secara aktif mencari petani lokal dan koordinator daerah di seluruh Indonesia untuk menyuplai komoditas kualitas ekspor.",
+      sopTitle: "Standar Operasional Prosedur (SOP) & Quality Control",
+      sopDescription: "Untuk menjaga reputasi internasional, seluruh mitra wajib mematuhi standar kualitas ketat berikut:",
+      sopSteps: [
+        { title: "Panen", description: "Lakukan pada waktu kematangan yang tepat. Hindari kontaminasi tanah atau bahan kimia." },
+        { title: "Penyortiran (Grading)", description: "Pisahkan berdasarkan ukuran/grade. Singkirkan produk cacat, berjamur, atau busuk. Pastikan batas kadar air terpenuhi." },
+        { title: "Penyimpanan", description: "Gunakan palet kayu (jangan menyentuh tanah). Simpan di area teduh, kering, dan sirkulasi udara baik." },
+        { title: "Pengemasan", description: "Gunakan karung goni atau mesh bag yang bersih. Tempelkan label Jenis, Grade, dan Nama Koordinator." },
+        { title: "Inspeksi Final (QC)", description: "Tim Co Export.ID melakukan pengecekan acak (Random Sampling) sebelum muat ke kontainer." }
+      ],
+      mouTitle: "Surat Perjanjian Kerjasama (MoU)",
+      mouDescription: "Kemitraan kita diikat melalui MoU yang menjamin harga pasar yang adil, sistem pembayaran jelas (DP & Pelunasan), dan komitmen mutu.",
+      ctaTitle: "Siap Mengekspor Hasil Panen Anda?",
+      ctaDescription: "Daftarkan komoditas dan kapasitas produksi Anda untuk memulai proses verifikasi mitra.",
+      ctaButton: "Daftar Sebagai Mitra",
     },
     features: {
       eyebrow: "Keunggulan",

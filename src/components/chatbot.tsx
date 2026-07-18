@@ -125,7 +125,7 @@ export function Chatbot() {
                             : "bg-[#f4f9f6] text-[#071811] rounded-bl-none border border-[#1d6b4f]/10"
                         }`}
                       >
-                        <div className="[&>p]:mb-2 last:[&>p]:mb-0 [&>ul]:list-disc [&>ul]:ml-4 [&>ul]:mb-2 [&>strong]:font-bold">
+                        <div className="prose prose-sm prose-emerald max-w-none leading-relaxed [&>p]:mb-3 last:[&>p]:mb-0 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:mb-3 [&>ul>li]:mb-1 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:mb-3 [&>ol>li]:mb-1 [&>strong]:font-semibold">
                           <ReactMarkdown>{(m as any).content || (m as any).text || ""}</ReactMarkdown>
                         </div>
                       </div>

@@ -3,6 +3,7 @@ import { ArrowRight, Container, Globe2, Sprout } from "lucide-react";
 
 import { FeatureGrid } from "@/components/feature-grid";
 import { HeroSection } from "@/components/hero-section";
+import { HowToOrderSection } from "@/components/how-to-order";
 import { InsightCard } from "@/components/insight-card";
 import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
@@ -52,6 +53,9 @@ export default async function Home({ searchParams }: HomeProps) {
 
       {/* Features */}
       <FeatureGrid locale={locale} />
+
+      {/* How to Order */}
+      <HowToOrderSection locale={locale} />
 
       {/* Featured products */}
       <section className="bg-background py-20">
