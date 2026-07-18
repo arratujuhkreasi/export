@@ -1,8 +1,14 @@
 import { streamText } from 'ai';
-import { google } from '@ai-sdk/google';
+import { createOpenAI } from '@ai-sdk/openai';
 import { getProducts } from '@/lib/cms';
 
 export const maxDuration = 30;
+
+// Configure Cerebras using the OpenAI SDK adapter
+const cerebras = createOpenAI({
+  baseURL: 'https://api.cerebras.ai/v1',
+  apiKey: process.env.CEREBRAS_API_KEY || 'csk-yje4v8y62h35drc4hkvjt6wnkewjwxtfy4dvwjhym96f8nnf',
+});
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
@@ -44,7 +50,7 @@ STRICT INSTRUCTIONS & BOUNDARIES:
   `;
 
   const result = streamText({
-    model: google('models/gemini-1.5-flash-latest'),
+    model: cerebras('llama3.1-8b'),
     system: systemPrompt,
     messages,
   });
