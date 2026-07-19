@@ -27,10 +27,14 @@ export async function generateMetadata({ params, searchParams }: InsightPageProp
   const locale = resolveLocale(lang);
   let post: Post | undefined = getPostBySlug(slug, locale);
 
-  if (!post && process.env.KV_REST_API_URL) {
+  const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!post && kvUrl && kvToken) {
     try {
-      const dynamicPosts: Post[] = await kv.get("dynamic-insights") || [];
-      post = dynamicPosts.find(p => p.slug === slug);
+      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({ url: kvUrl, token: kvToken });
+      const dynamicPosts: Post[] = await redis.get("dynamic-insights") || [];
+      post = dynamicPosts.find((p: Post) => p.slug === slug);
     } catch (e) {
       console.error(e);
     }
@@ -53,10 +57,14 @@ export default async function InsightDetailPage({ params, searchParams }: Insigh
   const copy = ui[locale].insights;
   let post: Post | undefined = getPostBySlug(slug, locale);
 
-  if (!post && process.env.KV_REST_API_URL) {
+  const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!post && kvUrl && kvToken) {
     try {
-      const dynamicPosts: Post[] = await kv.get("dynamic-insights") || [];
-      post = dynamicPosts.find(p => p.slug === slug);
+      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({ url: kvUrl, token: kvToken });
+      const dynamicPosts: Post[] = await redis.get("dynamic-insights") || [];
+      post = dynamicPosts.find((p: Post) => p.slug === slug);
     } catch (e) {
       console.error(e);
     }

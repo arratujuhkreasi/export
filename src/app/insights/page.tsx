@@ -27,8 +27,12 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
   
   let dynamicPosts: Post[] = [];
   try {
-    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-      dynamicPosts = await kv.get("dynamic-insights") || [];
+    const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+    const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+    if (kvUrl && kvToken) {
+      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({ url: kvUrl, token: kvToken });
+      dynamicPosts = await redis.get("dynamic-insights") || [];
     }
   } catch (error) {
     console.error("Failed to fetch dynamic insights from KV:", error);

@@ -67,10 +67,19 @@ IMPORTANT: You MUST search the internet to find a real, recent fact, trend, or n
       content: articleData.content,
     };
 
-    // 6. Save to Vercel KV (prepend to existing list)
+    // 6. Save to Vercel KV or Upstash (prepend to existing list)
     // We store the dynamic insights under the key 'dynamic-insights'
-    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-      let existingPosts: any[] = await kv.get("dynamic-insights") || [];
+    const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+    const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+    if (kvUrl && kvToken) {
+      // Create a custom kv instance if Upstash variables are used and KV variables are missing
+      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({
+        url: kvUrl,
+        token: kvToken,
+      });
+
+      let existingPosts: any[] = await redis.get("dynamic-insights") || [];
       existingPosts = [newPost, ...existingPosts];
       
       // Limit to max 30 posts to save space
@@ -78,7 +87,7 @@ IMPORTANT: You MUST search the internet to find a real, recent fact, trend, or n
         existingPosts = existingPosts.slice(0, 30);
       }
       
-      await kv.set("dynamic-insights", existingPosts);
+      await redis.set("dynamic-insights", existingPosts);
       
       return NextResponse.json({ success: true, post: newPost });
     } else {
