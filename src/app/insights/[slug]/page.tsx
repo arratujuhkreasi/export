@@ -6,8 +6,11 @@ import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { getPostBySlug, getPostStaticParams } from "@/lib/cms";
+import { kv } from "@vercel/kv";
+import { getPostBySlug, getPostStaticParams, Post } from "@/lib/cms";
 import { hrefWithLocale, resolveLocale, ui } from "@/lib/i18n";
+
+export const revalidate = 60; // Revalidate every 60 seconds
 
 type InsightPageProps = {
   params: Promise<{ slug: string }>;
@@ -22,7 +25,16 @@ export async function generateMetadata({ params, searchParams }: InsightPageProp
   const { slug } = await params;
   const { lang } = await searchParams;
   const locale = resolveLocale(lang);
-  const post = getPostBySlug(slug, locale);
+  let post: Post | undefined = getPostBySlug(slug, locale);
+
+  if (!post && process.env.KV_REST_API_URL) {
+    try {
+      const dynamicPosts: Post[] = await kv.get("dynamic-insights") || [];
+      post = dynamicPosts.find(p => p.slug === slug);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   if (!post) {
     return { title: "Insight Not Found" };
@@ -39,7 +51,16 @@ export default async function InsightDetailPage({ params, searchParams }: Insigh
   const { lang } = await searchParams;
   const locale = resolveLocale(lang);
   const copy = ui[locale].insights;
-  const post = getPostBySlug(slug, locale);
+  let post: Post | undefined = getPostBySlug(slug, locale);
+
+  if (!post && process.env.KV_REST_API_URL) {
+    try {
+      const dynamicPosts: Post[] = await kv.get("dynamic-insights") || [];
+      post = dynamicPosts.find(p => p.slug === slug);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   if (!post) {
     notFound();

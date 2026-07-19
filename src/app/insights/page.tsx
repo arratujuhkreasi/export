@@ -3,13 +3,17 @@ import type { Metadata } from "next";
 import { InsightCard } from "@/components/insight-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { getPosts } from "@/lib/cms";
+import { kv } from "@vercel/kv";
+import { getPosts, Post } from "@/lib/cms";
 import { resolveLocale, ui } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Insights",
   description: "Educational export sourcing articles for B2B commodity buyers.",
 };
+
+// Next.js dynamic rendering for this page so it updates when KV updates
+export const revalidate = 60; // Revalidate every 60 seconds
 
 type InsightsPageProps = {
   searchParams: Promise<{ lang?: string | string[] }>;
@@ -19,7 +23,18 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
   const { lang } = await searchParams;
   const locale = resolveLocale(lang);
   const copy = ui[locale].insights;
-  const posts = getPosts(locale);
+  const staticPosts = getPosts(locale);
+  
+  let dynamicPosts: Post[] = [];
+  try {
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      dynamicPosts = await kv.get("dynamic-insights") || [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch dynamic insights from KV:", error);
+  }
+
+  const posts = [...dynamicPosts, ...staticPosts];
 
   return (
     <section className="bg-background py-20">
