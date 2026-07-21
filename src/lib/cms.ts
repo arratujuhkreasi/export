@@ -5,6 +5,7 @@ export type Product = {
   slug: string;
   name: string;
   category: string;
+  categorySlug: string;
   description: string;
   longDescription: string;
   origin: string;
@@ -16,6 +17,11 @@ export type Product = {
   hsCode: string;
   supplyCapacity: string;
   catalogNote: string;
+  rating: number;
+  reviewCount: number;
+  isFeatured: boolean;
+  isNew: boolean;
+  discount: string;
   specs: {
     grade: string;
     moisture: string;
@@ -26,6 +32,24 @@ export type Product = {
   applications: string[];
   knowledge: string[];
   qualityControl: string[];
+};
+
+export type Category = {
+  id: string;
+  slug: string;
+  name: string;
+  icon: string;
+  productCount: number;
+};
+
+export type Testimonial = {
+  id: string;
+  name: string;
+  company: string;
+  country: string;
+  avatar: string;
+  rating: number;
+  comment: string;
 };
 
 export type Post = {
@@ -57,6 +81,7 @@ type ProductRecord = Omit<
   | "applications"
   | "knowledge"
   | "qualityControl"
+  | "discount"
 > & {
   name: Localized;
   category: Localized;
@@ -69,6 +94,7 @@ type ProductRecord = Omit<
   leadTime: Localized;
   supplyCapacity: Localized;
   catalogNote: Localized;
+  discount: Localized;
   specs: {
     grade: Localized;
     moisture: Localized;
@@ -81,6 +107,14 @@ type ProductRecord = Omit<
   qualityControl: Localized<string[]>;
 };
 
+type CategoryRecord = Omit<Category, "name"> & {
+  name: Localized;
+};
+
+type TestimonialRecord = Omit<Testimonial, "comment"> & {
+  comment: Localized;
+};
+
 type PostRecord = Omit<Post, "title" | "excerpt" | "readTime" | "content"> & {
   title: Localized;
   excerpt: Localized;
@@ -88,12 +122,62 @@ type PostRecord = Omit<Post, "title" | "excerpt" | "readTime" | "content"> & {
   content: Localized<string[]>;
 };
 
+const categoryRecords: CategoryRecord[] = [
+  { id: "cat-coconut", slug: "coconut-products", name: { en: "Coconut Products", id: "Produk Kelapa" }, icon: "🥥", productCount: 2 },
+  { id: "cat-timber", slug: "certified-timber", name: { en: "Certified Timber", id: "Kayu Bersertifikat" }, icon: "🪵", productCount: 1 },
+  { id: "cat-fresh", slug: "fresh-produce", name: { en: "Fresh Produce", id: "Hasil Segar" }, icon: "🍠", productCount: 1 },
+  { id: "cat-plantation", slug: "plantation", name: { en: "Plantation", id: "Perkebunan" }, icon: "🌴", productCount: 1 },
+  { id: "cat-bulk", slug: "bulk-orders", name: { en: "Bulk Orders", id: "Order Besar" }, icon: "📦", productCount: 5 },
+  { id: "cat-docs", slug: "documentation-ready", name: { en: "Docs Ready", id: "Siap Dokumen" }, icon: "📄", productCount: 5 },
+  { id: "cat-featured", slug: "featured", name: { en: "Featured", id: "Unggulan" }, icon: "⭐", productCount: 3 },
+];
+
+const testimonialRecords: TestimonialRecord[] = [
+  {
+    id: "test-1",
+    name: "Emily Davis",
+    company: "GreenGrow Substrates Ltd.",
+    country: "Australia",
+    avatar: "ED",
+    rating: 5,
+    comment: {
+      en: "Great quality products and fast delivery. The website is easy to use and has amazing collections!",
+      id: "Kualitas produk luar biasa dan pengiriman cepat. Websitenya mudah digunakan dan koleksinya sangat bagus!",
+    },
+  },
+  {
+    id: "test-2",
+    name: "Michael Brown",
+    company: "EuroTimber Solutions GmbH",
+    country: "Germany",
+    avatar: "MB",
+    rating: 5,
+    comment: {
+      en: "Excellent customer service and secure shopping experience. Highly recommend Shopure!",
+      id: "Pelayanan pelanggan excellent dan pengalaman belanja yang aman. Sangat direkomendasikan!",
+    },
+  },
+  {
+    id: "test-3",
+    name: "Jessica Wilson",
+    company: "AsiaPac Fresh Trading",
+    country: "Singapore",
+    avatar: "JW",
+    rating: 5,
+    comment: {
+      en: "I absolutely love the product quality. Will definitely shop here again!",
+      id: "Saya sangat suka kualitas produknya. Pasti akan belanja di sini lagi!",
+    },
+  },
+];
+
 const productRecords: ProductRecord[] = [
   {
     id: "prd-coco-peat",
     slug: "coco-peat-pangandaran",
     name: { en: "Coco Peat", id: "Coco Peat" },
     category: { en: "Coconut Growing Medium", id: "Media Tanam Kelapa" },
+    categorySlug: "coconut-products",
     description: {
       en: "Low-salt coconut coir pith for nurseries, hydroponic farms, potting mix factories, and soil conditioning programs.",
       id: "Serbuk sabut kelapa rendah garam untuk nursery, hidroponik, pabrik potting mix, dan program pembenah tanah.",
@@ -104,19 +188,24 @@ const productRecords: ProductRecord[] = [
     },
     origin: { en: "Pangandaran, West Java, Indonesia", id: "Pangandaran, Jawa Barat, Indonesia" },
     image: "/products/coco-peat-final.jpg",
-    priceRange: { en: "USD 180-260 / MT", id: "USD 180-260 / MT" },
-    minOrder: { en: "1 x 40' HC container", id: "1 kontainer 40' HC" },
+    priceRange: { en: "USD 180–260 / MT", id: "USD 180–260 / MT" },
+    minOrder: { en: "1 × 40' HC container", id: "1 kontainer 40' HC" },
     incoterm: { en: "Indicative FOB Tanjung Priok", id: "Indikatif FOB Tanjung Priok" },
-    leadTime: { en: "21-30 days after deposit and specification approval", id: "21-30 hari setelah DP dan approval spesifikasi" },
+    leadTime: { en: "21–30 days after deposit and specification approval", id: "21–30 hari setelah DP dan approval spesifikasi" },
     hsCode: "5305.00 / buyer confirmation required",
     supplyCapacity: { en: "Up to 80 MT per month by schedule", id: "Hingga 80 MT per bulan berdasarkan jadwal" },
     catalogNote: {
       en: "Indicative export range. Final quotation depends on EC, block size, washing level, palletizing, order volume, and destination requirements.",
       id: "Rentang ekspor indikatif. Penawaran final bergantung pada EC, ukuran blok, level washing, palletizing, volume order, dan syarat negara tujuan.",
     },
+    rating: 4.8,
+    reviewCount: 128,
+    isFeatured: true,
+    isNew: false,
+    discount: { en: "Bulk -15%", id: "Grosir -15%" },
     specs: {
       grade: { en: "Washed / unwashed, fine pith", id: "Washed / unwashed, serbuk halus" },
-      moisture: { en: "Max 18-20%", id: "Maks 18-20%" },
+      moisture: { en: "Max 18–20%", id: "Maks 18–20%" },
       packaging: { en: "5 kg block, 650 g brick, or bulk bag", id: "Blok 5 kg, brick 650 g, atau jumbo bag" },
       shelfLife: { en: "24 months in dry storage", id: "24 bulan di gudang kering" },
     },
@@ -150,6 +239,7 @@ const productRecords: ProductRecord[] = [
     slug: "coco-fiber-pangandaran",
     name: { en: "Coco Fiber", id: "Coco Fiber" },
     category: { en: "Natural Fiber", id: "Serat Natural" },
+    categorySlug: "coconut-products",
     description: {
       en: "Baled coconut coir fiber for mattress, erosion control, geotextile, brush, and industrial fiber buyers.",
       id: "Serat sabut kelapa dalam bale untuk pembeli matras, erosion control, geotextile, sikat, dan kebutuhan industri.",
@@ -160,20 +250,25 @@ const productRecords: ProductRecord[] = [
     },
     origin: { en: "Pangandaran, West Java, Indonesia", id: "Pangandaran, Jawa Barat, Indonesia" },
     image: "/products/coco-fiber-real.jpg",
-    priceRange: { en: "USD 220-340 / MT", id: "USD 220-340 / MT" },
-    minOrder: { en: "18-20 MT per 40' HC container", id: "18-20 MT per kontainer 40' HC" },
+    priceRange: { en: "USD 220–340 / MT", id: "USD 220–340 / MT" },
+    minOrder: { en: "18–20 MT per 40' HC container", id: "18–20 MT per kontainer 40' HC" },
     incoterm: { en: "Indicative FOB Tanjung Priok", id: "Indikatif FOB Tanjung Priok" },
-    leadTime: { en: "20-30 days after deposit", id: "20-30 hari setelah DP" },
+    leadTime: { en: "20–30 days after deposit", id: "20–30 hari setelah DP" },
     hsCode: "5305.00 / buyer confirmation required",
     supplyCapacity: { en: "Up to 100 MT per month by schedule", id: "Hingga 100 MT per bulan berdasarkan jadwal" },
     catalogNote: {
       en: "Indicative export range. Final quotation depends on fiber length, bale density, cleaning level, packing, and loading plan.",
       id: "Rentang ekspor indikatif. Penawaran final bergantung pada panjang serat, densitas bale, level cleaning, kemasan, dan rencana loading.",
     },
+    rating: 4.6,
+    reviewCount: 96,
+    isFeatured: true,
+    isNew: false,
+    discount: { en: "Bulk -10%", id: "Grosir -10%" },
     specs: {
       grade: { en: "Golden brown, mixed long and medium fiber", id: "Cokelat keemasan, campuran serat panjang dan sedang" },
-      moisture: { en: "Max 15-18%", id: "Maks 15-18%" },
-      packaging: { en: "100-125 kg pressed bale", id: "Bale press 100-125 kg" },
+      moisture: { en: "Max 15–18%", id: "Maks 15–18%" },
+      packaging: { en: "100–125 kg pressed bale", id: "Bale press 100–125 kg" },
       shelfLife: { en: "18 months in dry storage", id: "18 bulan di gudang kering" },
     },
     documents: {
@@ -206,6 +301,7 @@ const productRecords: ProductRecord[] = [
     slug: "legal-wood-pangandaran",
     name: { en: "Legal Wood", id: "Kayu Legal" },
     category: { en: "Certified Timber", id: "Kayu Bersertifikat" },
+    categorySlug: "certified-timber",
     description: {
       en: "Legally sourced Pangandaran timber boards and components for furniture, construction, and joinery buyers.",
       id: "Papan dan komponen kayu legal dari Pangandaran untuk pembeli furniture, konstruksi, dan joinery.",
@@ -216,19 +312,24 @@ const productRecords: ProductRecord[] = [
     },
     origin: { en: "Pangandaran, West Java, Indonesia", id: "Pangandaran, Jawa Barat, Indonesia" },
     image: "/products/legal-wood-real.jpg",
-    priceRange: { en: "USD 420-900 / CBM", id: "USD 420-900 / CBM" },
-    minOrder: { en: "1 x 20' container or project-based lot", id: "1 kontainer 20' atau lot berbasis proyek" },
+    priceRange: { en: "USD 420–900 / CBM", id: "USD 420–900 / CBM" },
+    minOrder: { en: "1 × 20' container or project-based lot", id: "1 kontainer 20' atau lot berbasis proyek" },
     incoterm: { en: "Indicative FOB Tanjung Priok / Tanjung Perak", id: "Indikatif FOB Tanjung Priok / Tanjung Perak" },
-    leadTime: { en: "30-45 days after species, dimension, and legality approval", id: "30-45 hari setelah approval jenis, dimensi, dan legalitas" },
+    leadTime: { en: "30–45 days after species, dimension, and legality approval", id: "30–45 hari setelah approval jenis, dimensi, dan legalitas" },
     hsCode: "4407 / 4418 by product type",
     supplyCapacity: { en: "Project-based, subject to legal stock availability", id: "Berbasis proyek, tergantung stok legal tersedia" },
     catalogNote: {
       en: "Indicative export range. Timber can only be quoted after species, dimensions, drying level, SVLK/legal documents, and destination rules are confirmed.",
       id: "Rentang ekspor indikatif. Kayu hanya dapat di-quote setelah jenis, dimensi, level pengeringan, dokumen SVLK/legal, dan aturan negara tujuan dikonfirmasi.",
     },
+    rating: 4.9,
+    reviewCount: 74,
+    isFeatured: true,
+    isNew: false,
+    discount: { en: "", id: "" },
     specs: {
       grade: { en: "Sawn timber / components by buyer specification", id: "Sawn timber / komponen sesuai spesifikasi pembeli" },
-      moisture: { en: "KD 10-14% or AD by request", id: "KD 10-14% atau AD sesuai permintaan" },
+      moisture: { en: "KD 10–14% or AD by request", id: "KD 10–14% atau AD sesuai permintaan" },
       packaging: { en: "Bundle with strap, pallet, or crate", id: "Bundle dengan strap, pallet, atau crate" },
       shelfLife: { en: "Dry indoor storage recommended", id: "Disarankan penyimpanan indoor kering" },
     },
@@ -262,6 +363,7 @@ const productRecords: ProductRecord[] = [
     slug: "ubi-sumedang",
     name: { en: "Sumedang Sweet Potato", id: "Ubi Sumedang" },
     category: { en: "Fresh Agricultural Produce", id: "Hasil Pertanian Segar" },
+    categorySlug: "fresh-produce",
     description: {
       en: "Sorted sweet potato from Sumedang, West Java, for fresh produce buyers, processors, and specialty food distributors.",
       id: "Ubi sortir dari Sumedang, Jawa Barat, untuk pembeli fresh produce, prosesor, dan distributor makanan specialty.",
@@ -272,21 +374,26 @@ const productRecords: ProductRecord[] = [
     },
     origin: { en: "Sumedang, West Java, Indonesia", id: "Sumedang, Jawa Barat, Indonesia" },
     image: "/products/sweet-potato-real.jpg",
-    priceRange: { en: "USD 850-1,250 / MT", id: "USD 850-1,250 / MT" },
-    minOrder: { en: "5 MT trial or 1 x 20' reefer/dry by product form", id: "Trial 5 MT atau 1 kontainer 20' reefer/dry sesuai bentuk produk" },
+    priceRange: { en: "USD 850–1,250 / MT", id: "USD 850–1,250 / MT" },
+    minOrder: { en: "5 MT trial or 1 × 20' reefer/dry by product form", id: "Trial 5 MT atau 1 kontainer 20' reefer/dry sesuai bentuk produk" },
     incoterm: { en: "Indicative FOB Tanjung Priok", id: "Indikatif FOB Tanjung Priok" },
-    leadTime: { en: "14-25 days after harvest schedule confirmation", id: "14-25 hari setelah konfirmasi jadwal panen" },
+    leadTime: { en: "14–25 days after harvest schedule confirmation", id: "14–25 hari setelah konfirmasi jadwal panen" },
     hsCode: "0714 / 0714.20 by product form",
     supplyCapacity: { en: "Seasonal, coordinated by harvest window", id: "Musiman, dikoordinasikan berdasarkan window panen" },
     catalogNote: {
       en: "Indicative export range. Final price depends on variety, sizing, washing, curing, fresh or processed form, and cold-chain requirements.",
       id: "Rentang ekspor indikatif. Harga final bergantung pada varietas, ukuran, washing, curing, bentuk fresh atau olahan, dan kebutuhan cold-chain.",
     },
+    rating: 4.5,
+    reviewCount: 43,
+    isFeatured: false,
+    isNew: true,
+    discount: { en: "New Arrival", id: "Produk Baru" },
     specs: {
       grade: { en: "Fresh sorted A/B, buyer sizing available", id: "Fresh sortasi A/B, sizing sesuai pembeli tersedia" },
       moisture: { en: "Fresh crop, cured by request", id: "Fresh crop, curing sesuai permintaan" },
       packaging: { en: "10 kg carton, mesh bag, or processor sack", id: "Karton 10 kg, mesh bag, atau karung prosesor" },
-      shelfLife: { en: "2-6 weeks depending on curing and storage", id: "2-6 minggu tergantung curing dan penyimpanan" },
+      shelfLife: { en: "2–6 weeks depending on curing and storage", id: "2–6 minggu tergantung curing dan penyimpanan" },
     },
     documents: {
       en: ["Commercial Invoice", "Packing List", "Certificate of Origin", "Phytosanitary Certificate", "Health Certificate by request"],
@@ -318,6 +425,7 @@ const productRecords: ProductRecord[] = [
     slug: "pinang-muda-aceh",
     name: { en: "Young Areca Nut", id: "Pinang Muda" },
     category: { en: "Fresh Plantation Commodity", id: "Komoditas Perkebunan Segar" },
+    categorySlug: "plantation",
     description: {
       en: "Young areca nut from Aceh in northern Sumatra, sorted for fresh commodity buyers and processors.",
       id: "Pinang muda dari Aceh di bagian utara Pulau Sumatera, disortir untuk pembeli komoditas segar dan prosesor.",
@@ -328,16 +436,21 @@ const productRecords: ProductRecord[] = [
     },
     origin: { en: "Aceh, northern Sumatra, Indonesia", id: "Aceh, bagian utara Pulau Sumatera, Indonesia" },
     image: "/products/areca-nut-real.jpg",
-    priceRange: { en: "USD 900-1,400 / MT", id: "USD 900-1,400 / MT" },
-    minOrder: { en: "5 MT trial or 1 x 20' container", id: "Trial 5 MT atau 1 kontainer 20'" },
+    priceRange: { en: "USD 900–1,400 / MT", id: "USD 900–1,400 / MT" },
+    minOrder: { en: "5 MT trial or 1 × 20' container", id: "Trial 5 MT atau 1 kontainer 20'" },
     incoterm: { en: "Indicative FOB Belawan / Tanjung Priok", id: "Indikatif FOB Belawan / Tanjung Priok" },
-    leadTime: { en: "14-28 days after specification and destination approval", id: "14-28 hari setelah approval spesifikasi dan negara tujuan" },
+    leadTime: { en: "14–28 days after specification and destination approval", id: "14–28 hari setelah approval spesifikasi dan negara tujuan" },
     hsCode: "0802 / buyer and customs confirmation required",
     supplyCapacity: { en: "Seasonal and buyer-program based", id: "Musiman dan berbasis program pembeli" },
     catalogNote: {
       en: "Indicative export range. Final quotation requires maturity grade, fresh/dried form, packing method, destination legality, and inspection requirements.",
       id: "Rentang ekspor indikatif. Penawaran final membutuhkan grade kematangan, bentuk fresh/dried, metode kemasan, legalitas negara tujuan, dan kebutuhan inspeksi.",
     },
+    rating: 4.7,
+    reviewCount: 61,
+    isFeatured: false,
+    isNew: true,
+    discount: { en: "New Arrival", id: "Produk Baru" },
     specs: {
       grade: { en: "Young green nut, maturity by buyer spec", id: "Pinang hijau muda, kematangan sesuai spesifikasi pembeli" },
       moisture: { en: "Fresh crop or dried by request", id: "Fresh crop atau dried sesuai permintaan" },
@@ -461,6 +574,11 @@ function localizeProduct(product: ProductRecord, locale: Locale): Product {
     slug: product.slug,
     image: product.image,
     hsCode: product.hsCode,
+    categorySlug: product.categorySlug,
+    rating: product.rating,
+    reviewCount: product.reviewCount,
+    isFeatured: product.isFeatured,
+    isNew: product.isNew,
     name: product.name[locale],
     category: product.category[locale],
     description: product.description[locale],
@@ -472,6 +590,7 @@ function localizeProduct(product: ProductRecord, locale: Locale): Product {
     leadTime: product.leadTime[locale],
     supplyCapacity: product.supplyCapacity[locale],
     catalogNote: product.catalogNote[locale],
+    discount: product.discount[locale],
     specs: {
       grade: product.specs.grade[locale],
       moisture: product.specs.moisture[locale],
@@ -498,22 +617,66 @@ function localizePost(post: PostRecord, locale: Locale): Post {
   };
 }
 
+function localizeCategory(cat: CategoryRecord, locale: Locale): Category {
+  return {
+    id: cat.id,
+    slug: cat.slug,
+    icon: cat.icon,
+    productCount: cat.productCount,
+    name: cat.name[locale],
+  };
+}
+
+function localizeTestimonial(t: TestimonialRecord, locale: Locale): Testimonial {
+  return {
+    id: t.id,
+    name: t.name,
+    company: t.company,
+    country: t.country,
+    avatar: t.avatar,
+    rating: t.rating,
+    comment: t.comment[locale],
+  };
+}
+
 export function getProducts(locale: Locale = "en") {
   return productRecords.map((product) => localizeProduct(product, locale));
 }
 
 export function getFeaturedProducts(locale: Locale = "en") {
-  return getProducts(locale).slice(0, 3);
+  return getProducts(locale).filter((p) => p.isFeatured);
 }
 
 export function getProductBySlug(slug: string, locale: Locale = "en") {
   const product = productRecords.find((item) => item.slug === slug);
-
   return product ? localizeProduct(product, locale) : undefined;
 }
 
 export function getProductStaticParams() {
   return productRecords.map((product) => ({ slug: product.slug }));
+}
+
+export function getProductsByCategory(categorySlug: string, locale: Locale = "en") {
+  return getProducts(locale).filter((p) => p.categorySlug === categorySlug);
+}
+
+export function searchProducts(query: string, locale: Locale = "en") {
+  const q = query.toLowerCase();
+  return getProducts(locale).filter(
+    (p) =>
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.origin.toLowerCase().includes(q)
+  );
+}
+
+export function getCategories(locale: Locale = "en") {
+  return categoryRecords.map((cat) => localizeCategory(cat, locale));
+}
+
+export function getTestimonials(locale: Locale = "en") {
+  return testimonialRecords.map((t) => localizeTestimonial(t, locale));
 }
 
 export function getPosts(locale: Locale = "en") {
@@ -526,7 +689,6 @@ export function getRecentPosts(locale: Locale = "en") {
 
 export function getPostBySlug(slug: string, locale: Locale = "en") {
   const post = postRecords.find((item) => item.slug === slug);
-
   return post ? localizePost(post, locale) : undefined;
 }
 
@@ -536,6 +698,3 @@ export function getPostStaticParams() {
 
 export const products = getProducts("en");
 export const posts = getPosts("en");
-
-
-
