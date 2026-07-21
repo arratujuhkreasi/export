@@ -1,4 +1,4 @@
-import { streamText } from 'ai';
+import { streamText, convertToModelMessages } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { getProducts } from '@/lib/cms';
 
@@ -60,7 +60,7 @@ STRICT INSTRUCTIONS & BOUNDARIES:
   const result = streamText({
     model: cerebras.chat('llama3.3-70b'),
     system: systemPrompt,
-    messages,
+    messages: await convertToModelMessages(messages),
   });
 
   return result.toTextStreamResponse();
