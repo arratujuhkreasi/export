@@ -153,8 +153,8 @@ const testimonialRecords: TestimonialRecord[] = [
     avatar: "MB",
     rating: 5,
     comment: {
-      en: "Excellent customer service and secure shopping experience. Highly recommend Shopure!",
-      id: "Pelayanan pelanggan excellent dan pengalaman belanja yang aman. Sangat direkomendasikan!",
+      en: "Clear export specifications, responsive quotation support, and practical documentation guidance.",
+      id: "Spesifikasi ekspor jelas, dukungan quotation responsif, dan arahan dokumentasi yang praktis.",
     },
   },
   {

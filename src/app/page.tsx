@@ -93,17 +93,19 @@ export default async function Home({ searchParams }: HomeProps) {
                   </Link>
                 </Button>
 
-                {/* Testimonial mini */}
+                {/* RFQ flow note */}
                 <div className="mt-6 rounded-xl bg-white/70 p-4 shadow-sm">
                   <p className="text-xs italic leading-5 text-muted-foreground">
-                    &quot;Amazing quality, fast delivery and excellent customer service. Highly recommended!&quot;
+                    {locale === "id"
+                      ? "Tambahkan produk ke inquiry cart, kirim RFQ, lalu tim sales menyiapkan quotation final, payment term, dan dokumen ekspor."
+                      : "Add products to the inquiry cart, submit an RFQ, then the sales desk prepares final quotation, payment terms, and export documents."}
                   </p>
                   <div className="mt-3 flex items-center gap-2">
                     <div className="flex size-7 items-center justify-center rounded-full bg-[#1d6b4f] text-[10px] font-bold text-white">
-                      SJ
+                      RFQ
                     </div>
                     <div>
-                      <p className="text-xs font-semibold">Sarah Johnson</p>
+                      <p className="text-xs font-semibold">{locale === "id" ? "Alur transaksi B2B" : "B2B transaction flow"}</p>
                       <p className="text-[10px] text-muted-foreground">⭐⭐⭐⭐⭐</p>
                     </div>
                   </div>

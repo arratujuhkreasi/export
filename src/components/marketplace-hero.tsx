@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Heart } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ export function MarketplaceHero({ locale }: { locale: Locale }) {
           >
             {copy.title}{" "}
             <span className="text-[#1d6b4f]">{copy.titleAccent}</span>{" "}
-            <Heart className="mb-1 inline size-8 text-[#1d6b4f]" aria-hidden="true" />
+            <FileText className="mb-1 inline size-8 text-[#1d6b4f]" aria-hidden="true" />
           </motion.h1>
 
           <motion.p
@@ -107,7 +107,7 @@ export function MarketplaceHero({ locale }: { locale: Locale }) {
             {/* Floating price badge */}
             <div className="absolute right-4 top-4 flex size-20 flex-col items-center justify-center rounded-full bg-[#1d6b4f] text-white shadow-lg">
               <span className="text-[10px] font-semibold uppercase tracking-wide">{copy.upTo}</span>
-              <span className="text-xl font-bold leading-none">50%</span>
+              <span className="text-xl font-bold leading-none">RFQ</span>
               <span className="text-[10px] font-medium uppercase">{copy.fobLabel}</span>
             </div>
           </div>

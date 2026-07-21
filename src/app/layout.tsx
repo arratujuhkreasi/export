@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
 
 import { Chatbot } from "@/components/chatbot";
+import { siteConfig } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,13 +21,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://export-import-app.vercel.app"),
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: "CO EXPORT.ID | Global Logistics & Trade",
+    default: "CO EXPORT.ID | B2B Export Marketplace",
     template: "%s | CO EXPORT.ID",
   },
-  description:
-    "B2B export catalog for coco peat, coco fiber, legal wood, Sumedang sweet potato, and young areca nut from Indonesia.",
+  description: siteConfig.description,
+  openGraph: {
+    title: "CO EXPORT.ID | B2B Export Marketplace",
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    images: [{ url: siteConfig.logo, width: 640, height: 640, alt: "CO EXPORT.ID logo" }],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

@@ -8,7 +8,7 @@ export const maxDuration = 30;
 const cerebras = createOpenAI({
   baseURL: 'https://api.cerebras.ai/v1',
   apiKey: process.env.CEREBRAS_API_KEY,
-  // @ts-ignore
+  // @ts-expect-error The Cerebras-compatible OpenAI endpoint accepts this adapter option.
   compatibility: 'compatible',
 });
 

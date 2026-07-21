@@ -1,5 +1,5 @@
 import { google } from "@ai-sdk/google";
-import { kv } from "@vercel/kv";
+import { createClient, kv } from "@vercel/kv";
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 
@@ -45,11 +45,15 @@ IMPORTANT: You MUST search the internet to find a real, recent fact, trend, or n
     });
 
     // 4. Parse the generated JSON safely
-    let articleData;
+    let articleData: {
+      title: string;
+      excerpt: string;
+      content: string[];
+    };
     try {
       const cleanJson = text.replace(/```json/g, "").replace(/```/g, "").trim();
       articleData = JSON.parse(cleanJson);
-    } catch (e) {
+    } catch {
       console.error("Failed to parse AI output:", text);
       return NextResponse.json({ error: "AI Output Parsing Failed", raw: text }, { status: 500 });
     }
@@ -74,12 +78,12 @@ IMPORTANT: You MUST search the internet to find a real, recent fact, trend, or n
 
     if (kvUrl && kvToken) {
       // Create a custom kv instance if Upstash variables are used and KV variables are missing
-      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({
+      const redis = process.env.KV_REST_API_URL ? kv : createClient({
         url: kvUrl,
         token: kvToken,
       });
 
-      let existingPosts: any[] = await redis.get("dynamic-insights") || [];
+      let existingPosts: typeof newPost[] = await redis.get<typeof newPost[]>("dynamic-insights") || [];
       existingPosts = [newPost, ...existingPosts];
       
       // Limit to max 30 posts to save space

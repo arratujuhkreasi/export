@@ -26,7 +26,7 @@ export default async function PartnershipPage({ searchParams }: PartnershipPageP
 
   return (
     <>
-      <section className="relative overflow-hidden bg-[#eef6f2] py-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#eef6f2] to-background py-20">
         <div
           className="pointer-events-none absolute inset-0 opacity-50"
           style={{
@@ -36,17 +36,22 @@ export default async function PartnershipPage({ searchParams }: PartnershipPageP
         />
         <div className="relative mx-auto w-full max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
-            <p className="flex items-center justify-center gap-3 text-sm font-semibold uppercase tracking-[0.18em]">
-              <span className="inline-block h-px w-8 bg-gradient-to-r from-transparent to-[#2a9d6f]" aria-hidden="true" />
-              <span className="gradient-text">{copy.eyebrow}</span>
-              <span className="inline-block h-px w-8 bg-gradient-to-l from-transparent to-[#2a9d6f]" aria-hidden="true" />
-            </p>
-            <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+            <span className="inline-block rounded-full bg-[#1d6b4f]/10 px-3 py-1 text-sm font-semibold text-[#1d6b4f]">
+              {copy.eyebrow}
+            </span>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               {copy.title}
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
               {copy.description}
             </p>
+            <div className="mt-8 flex justify-center gap-4">
+              <Button asChild size="lg" className="rounded-full bg-[#1d6b4f] px-8 text-base font-semibold text-white shadow-lg shadow-[#1d6b4f]/25 transition-transform hover:scale-105 hover:bg-[#174f3b]">
+                <Link href={hrefWithLocale("/partnership/apply", locale)}>
+                  Apply as Supplier
+                </Link>
+              </Button>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -97,7 +102,7 @@ export default async function PartnershipPage({ searchParams }: PartnershipPageP
         </div>
       </section>
 
-      <section className="bg-[#faf8f5] py-20">
+      <section className="bg-background py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <SectionHeading
@@ -112,11 +117,11 @@ export default async function PartnershipPage({ searchParams }: PartnershipPageP
               const Icon = sopIcons[index];
               return (
                 <Reveal key={step.title} delay={index * 0.1}>
-                  <div className="group h-full rounded-2xl border border-border/50 bg-[#faf8f5] p-6 transition-all duration-300 hover:border-[#1d6b4f]/30 hover:bg-[#eef6f2] hover:shadow-md">
-                    <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-white text-[#1d6b4f] shadow-sm">
+                  <div className="marketplace-card group h-full rounded-2xl border border-border/60 bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#1d6b4f]/30 hover:shadow-lg">
+                    <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-[#eef6f2] text-[#1d6b4f] shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:bg-[#1d6b4f] group-hover:text-white">
                       <Icon className="size-6" />
                     </div>
-                    <h3 className="text-lg font-semibold">{step.title}</h3>
+                    <h3 className="text-lg font-bold">{step.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.description}</p>
                   </div>
                 </Reveal>

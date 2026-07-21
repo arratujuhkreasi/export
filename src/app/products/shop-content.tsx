@@ -15,10 +15,11 @@ export default function ShopContent() {
   const locale = resolveLocale(searchParams.get("lang") ?? undefined);
   const copy = ui[locale].products;
   const filterCopy = copy.filters;
-  const allProducts = getProducts(locale);
-  const categories = getCategories(locale);
+  const allProducts = useMemo(() => getProducts(locale), [locale]);
+  const categories = useMemo(() => getCategories(locale), [locale]);
 
   const urlCategory = searchParams.get("category") ?? "";
+  const query = (searchParams.get("query") ?? "").trim().toLowerCase();
 
   const [selectedCategory, setSelectedCategory] = useState(urlCategory);
   const [sortBy, setSortBy] = useState("popular");
@@ -31,6 +32,17 @@ export default function ShopContent() {
     // Filter by category slug
     if (selectedCategory) {
       products = products.filter((p) => p.categorySlug === selectedCategory);
+    }
+
+    if (query) {
+      products = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query) ||
+          p.origin.toLowerCase().includes(query) ||
+          p.hsCode.toLowerCase().includes(query)
+      );
     }
 
     // Sort
@@ -47,7 +59,7 @@ export default function ShopContent() {
     }
 
     return products;
-  }, [allProducts, selectedCategory, sortBy]);
+  }, [allProducts, selectedCategory, sortBy, query]);
 
   const mainCategories = categories.filter(
     (c) => !["cat-bulk", "cat-docs", "cat-featured"].includes(c.id)

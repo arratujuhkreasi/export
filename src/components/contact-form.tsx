@@ -45,29 +45,26 @@ export function ContactForm({
 
   async function onSubmit(values: InquiryForm) {
     setIsSubmitting(true);
-    const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL;
 
     try {
-      if (webhookUrl) {
-        const response = await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+      const response = await fetch("/api/rfq", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contact_inquiry",
+          inquiry: {
             ...values,
             language: locale,
-            source: "CO EXPORT.ID website",
-            submittedAt: new Date().toISOString(),
-          }),
-        });
+          },
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Webhook request failed");
-        }
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 650));
+      if (!response.ok) {
+        throw new Error("Inquiry request failed");
       }
 
-      toast.success(webhookUrl ? copy.successWebhook : copy.successDemo);
+      const result = (await response.json()) as { delivery?: string };
+      toast.success(result.delivery === "webhook" ? copy.successWebhook : copy.successDemo);
       reset();
     } catch {
       toast.error(copy.error);

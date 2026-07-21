@@ -1,52 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, FileCheck2, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { hrefWithLocale, type Locale, ui } from "@/lib/i18n";
-
-function CountdownTimer({ locale }: { locale: Locale }) {
-  const copy = ui[locale].marketplace;
-  const [time, setTime] = useState({ hours: 12, mins: 45, secs: 30 });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime((prev) => {
-        let { hours, mins, secs } = prev;
-        secs--;
-        if (secs < 0) {
-          secs = 59;
-          mins--;
-        }
-        if (mins < 0) {
-          mins = 59;
-          hours--;
-        }
-        if (hours < 0) {
-          hours = 23;
-          mins = 59;
-          secs = 59;
-        }
-        return { hours, mins, secs };
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="flex items-center gap-2">
-      <div className="countdown-digit text-lg">{String(time.hours).padStart(2, "0")}</div>
-      <span className="text-lg font-bold text-white">:</span>
-      <div className="countdown-digit text-lg">{String(time.mins).padStart(2, "0")}</div>
-      <span className="text-lg font-bold text-white">:</span>
-      <div className="countdown-digit text-lg">{String(time.secs).padStart(2, "0")}</div>
-    </div>
-  );
-}
 
 export function PromoBanners({ locale }: { locale: Locale }) {
   const copy = ui[locale].marketplace;
@@ -55,7 +15,6 @@ export function PromoBanners({ locale }: { locale: Locale }) {
     <section className="bg-background py-6">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-4 md:grid-cols-2">
-          {/* Banner 1: Bulk Order */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -67,7 +26,9 @@ export function PromoBanners({ locale }: { locale: Locale }) {
             <div className="pointer-events-none absolute -bottom-8 -left-8 size-32 rounded-full bg-white/[0.04]" />
             <div className="relative z-10">
               <h3 className="text-lg font-bold sm:text-xl">{copy.bulkDiscount}</h3>
-              <p className="mt-1 text-2xl font-extrabold sm:text-3xl">{copy.bulkDesc}</p>
+              <p className="mt-1 text-2xl font-extrabold sm:text-3xl">
+                {locale === "id" ? "RFQ untuk order kontainer" : "RFQ for container orders"}
+              </p>
               <p className="mt-1 text-sm text-white/70">{copy.bulkSubDesc}</p>
               <Button
                 asChild
@@ -90,7 +51,6 @@ export function PromoBanners({ locale }: { locale: Locale }) {
             </div>
           </motion.div>
 
-          {/* Banner 2: Deal of the Day */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -101,22 +61,28 @@ export function PromoBanners({ locale }: { locale: Locale }) {
             <div className="pointer-events-none absolute -right-10 -top-10 size-40 rounded-full bg-[#2a9d6f]/10" />
             <div className="relative z-10">
               <h3 className="text-lg font-bold sm:text-xl">{copy.newArrivals}</h3>
-              <p className="mt-1 text-sm text-white/60">{copy.hurryUp}</p>
-              <div className="mt-4">
-                <CountdownTimer locale={locale} />
-              </div>
-              <div className="mt-2 flex items-center gap-1 text-[10px] text-white/40">
-                <span>{copy.hours}</span>
-                <span className="ml-5">{copy.mins}</span>
-                <span className="ml-5">{copy.secs}</span>
+              <p className="mt-1 max-w-md text-sm leading-6 text-white/60">
+                {locale === "id"
+                  ? "Setiap RFQ ditinjau berdasarkan spesifikasi, negara tujuan, dokumen, dan kesiapan kapasitas pasok."
+                  : "Every RFQ is reviewed against specification, destination rules, export documents, and supply capacity."}
+              </p>
+              <div className="mt-4 grid gap-2 text-sm text-white/80">
+                <span className="flex items-center gap-2">
+                  <FileCheck2 className="size-4 text-emerald-300" aria-hidden="true" />
+                  {locale === "id" ? "Dokumen ekspor per komoditas" : "Commodity-specific export documents"}
+                </span>
+                <span className="flex items-center gap-2">
+                  <ShieldCheck className="size-4 text-emerald-300" aria-hidden="true" />
+                  {locale === "id" ? "Review compliance sebelum quotation" : "Compliance review before quotation"}
+                </span>
               </div>
               <Button
                 asChild
                 size="sm"
                 className="mt-5 rounded-full bg-[#1d6b4f] px-6 text-white shadow-md hover:bg-[#2a9d6f]"
               >
-                <Link href={hrefWithLocale("/products", locale)}>
-                  {copy.shopNow} <ArrowRight className="ml-1 size-3.5" aria-hidden="true" />
+                <Link href={hrefWithLocale("/cart", locale)}>
+                  {copy.viewInquiryCart} <ArrowRight className="ml-1 size-3.5" aria-hidden="true" />
                 </Link>
               </Button>
             </div>

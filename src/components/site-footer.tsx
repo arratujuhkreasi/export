@@ -7,6 +7,7 @@ import { CreditCard, Mail, MapPin, MessageCircle } from "lucide-react";
 
 import { brandName, hrefWithLocale, resolveLocale, ui } from "@/lib/i18n";
 import { getCategories } from "@/lib/cms";
+import { getSalesWhatsAppHref, siteConfig } from "@/lib/site";
 
 export function SiteFooter() {
   const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ export function SiteFooter() {
   const categories = getCategories(locale).filter(
     (c) => !["cat-bulk", "cat-docs", "cat-featured"].includes(c.id)
   );
+  const whatsappHref = getSalesWhatsAppHref();
 
   function localizedHref(path: string) {
     return hrefWithLocale(path, locale);
@@ -39,12 +41,12 @@ export function SiteFooter() {
         {/* Column 1: Brand */}
         <div>
           <div className="flex items-center gap-2">
-            <span className="relative h-14 w-56 overflow-hidden rounded-md bg-white/95 shadow-lg shadow-black/10">
+            <span className="relative h-20 w-72 overflow-hidden rounded-md bg-white/95 shadow-lg shadow-black/10">
               <Image
-                src="/brand/co-export-logo-final.png"
+                src={siteConfig.logo}
                 alt={`${brandName} logo`}
                 fill
-                sizes="224px"
+                sizes="288px"
                 className="object-contain"
               />
             </span>
@@ -98,14 +100,20 @@ export function SiteFooter() {
           <h2 className="text-sm font-semibold text-white">{copy.footer.salesDesk}</h2>
           <div className="mt-4 grid gap-3 text-sm text-white/50">
             <span className="flex gap-2">
-              <MapPin className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> Bandung, West Java, Indonesia
+              <MapPin className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> {siteConfig.address}
             </span>
-            <a href="mailto:sales@coexport.id" className="flex gap-2 transition-colors duration-200 hover:text-white">
-              <Mail className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> sales@coexport.id
+            <a href={`mailto:${siteConfig.email}`} className="flex gap-2 transition-colors duration-200 hover:text-white">
+              <Mail className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> {siteConfig.email}
             </a>
-            <a href="https://wa.me/6281234567890" className="flex gap-2 transition-colors duration-200 hover:text-white">
-              <MessageCircle className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> {copy.footer.whatsapp}
-            </a>
+            {whatsappHref ? (
+              <a href={whatsappHref} className="flex gap-2 transition-colors duration-200 hover:text-white">
+                <MessageCircle className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> {copy.footer.whatsapp}
+              </a>
+            ) : (
+              <span className="flex gap-2">
+                <MessageCircle className="mt-0.5 size-4 flex-none text-emerald-400/60" aria-hidden="true" /> WhatsApp sales pending setup
+              </span>
+            )}
           </div>
 
           {/* Payment methods */}

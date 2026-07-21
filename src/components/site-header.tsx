@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Menu, Search, ShoppingBag, User } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { CartIndicator } from "@/components/cart-indicator";
 import {
   Sheet,
   SheetContent,
@@ -15,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { brandName, hrefWithLocale, resolveLocale, type Locale, ui } from "@/lib/i18n";
+import { siteConfig } from "@/lib/site";
 
 const navigation = [
   { href: "/", key: "home" },
@@ -23,14 +25,17 @@ const navigation = [
   { href: "/partnership", key: "partnership" },
   { href: "/insights", key: "insights" },
   { href: "/contact", key: "contact" },
+  { href: "/cart", key: "cart" },
 ] as const;
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const locale = resolveLocale(searchParams.get("lang") ?? undefined);
   const copy = ui[locale].nav;
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("query") ?? "");
 
   function localizedHref(path: string, nextLocale = locale) {
     return hrefWithLocale(path, nextLocale);
@@ -48,6 +53,16 @@ export function SiteHeader() {
     return pathname.startsWith(href);
   }
 
+  function submitSearch(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    const params = new URLSearchParams();
+    params.set("lang", locale);
+    if (query) params.set("query", query);
+    router.push(`/products?${params.toString()}`);
+    setSearchOpen(false);
+  }
+
   return (
     <header className="sticky top-0 z-50 transition-all duration-500 bg-white/95 backdrop-blur-md border-b border-border/60 shadow-sm">
       {/* Top bar */}
@@ -57,13 +72,13 @@ export function SiteHeader() {
           href={localizedHref("/")}
           className="group flex flex-none items-center gap-3 font-semibold"
         >
-          <span className="relative h-14 w-52 overflow-hidden transition-transform duration-300 group-hover:scale-105 lg:h-16 lg:w-64">
+          <span className="relative h-16 w-56 overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:w-64 lg:h-20 lg:w-80">
             <Image
-              src="/brand/co-export-logo-final.png"
+              src={siteConfig.logo}
               alt={`${brandName} logo`}
               fill
               priority
-              sizes="256px"
+              sizes="(min-width: 1024px) 320px, 256px"
               className="object-contain object-left"
             />
           </span>
@@ -72,14 +87,16 @@ export function SiteHeader() {
 
         {/* Center: Search Bar (desktop) */}
         <div className="hidden flex-1 items-center justify-center px-6 md:flex lg:px-12">
-          <div className="search-bar flex w-full max-w-lg items-center gap-2 px-4 py-2.5">
+          <form onSubmit={submitSearch} className="search-bar flex w-full max-w-lg items-center gap-2 px-4 py-2.5">
             <Search className="size-4 flex-none text-muted-foreground" aria-hidden="true" />
             <input
               type="text"
               placeholder={copy.searchPlaceholder}
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
               className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
             />
-          </div>
+          </form>
         </div>
 
         {/* Right: Icons + Lang */}
@@ -99,9 +116,7 @@ export function SiteHeader() {
               </Link>
             ))}
           </div>
-          <Button variant="ghost" size="icon" className="text-foreground/70 hover:text-[#1d6b4f]" aria-label="Account">
-            <User className="size-5" />
-          </Button>
+          <CartIndicator locale={locale} />
           <Button asChild className="ml-1 bg-[#1d6b4f] text-white shadow-md shadow-[#1d6b4f]/20 transition-all duration-300 hover:bg-[#174f3b] hover:shadow-lg hover:shadow-[#1d6b4f]/30">
             <Link href={localizedHref("/contact")}>{copy.quote}</Link>
           </Button>
@@ -128,7 +143,7 @@ export function SiteHeader() {
                 <SheetTitle className="flex items-center gap-2">
                   <span className="relative h-14 w-48 overflow-hidden">
                     <Image
-                      src="/brand/co-export-logo-final.png"
+                      src={siteConfig.logo}
                       alt={`${brandName} logo`}
                       fill
                       sizes="192px"
@@ -197,15 +212,17 @@ export function SiteHeader() {
       {/* Mobile search dropdown */}
       {searchOpen && (
         <div className="border-t border-border/40 bg-white px-4 py-3 md:hidden">
-          <div className="search-bar flex items-center gap-2 px-4 py-2.5">
+          <form onSubmit={submitSearch} className="search-bar flex items-center gap-2 px-4 py-2.5">
             <Search className="size-4 flex-none text-muted-foreground" aria-hidden="true" />
             <input
               type="text"
               placeholder={copy.searchPlaceholder}
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
               className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
               autoFocus
             />
-          </div>
+          </form>
         </div>
       )}
     </header>

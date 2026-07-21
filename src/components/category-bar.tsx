@@ -9,7 +9,9 @@ import { getCategories } from "@/lib/cms";
 export function CategoryBar() {
   const searchParams = useSearchParams();
   const locale = resolveLocale(searchParams.get("lang") ?? undefined);
-  const categories = getCategories(locale);
+  const categories = getCategories(locale).filter(
+    (cat) => !["cat-bulk", "cat-docs", "cat-featured"].includes(cat.id)
+  );
 
   return (
     <section className="border-b border-border/60 bg-white py-4">

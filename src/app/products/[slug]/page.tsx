@@ -7,10 +7,12 @@ import { ArrowLeft, CheckCircle2, FileText, MapPin, MessageCircle, ShoppingBag, 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { AddToInquiryButton } from "@/components/add-to-inquiry-button";
 import { MarketplaceProductCard } from "@/components/marketplace-product-card";
 import { Reveal } from "@/components/reveal";
 import { getProductBySlug, getProductStaticParams, getProducts } from "@/lib/cms";
 import { hrefWithLocale, resolveLocale, ui } from "@/lib/i18n";
+import { getSalesWhatsAppHref, siteConfig } from "@/lib/site";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -51,9 +53,36 @@ export default async function ProductDetailPage({ params, searchParams }: Produc
 
   const specLabels = copy.specs;
   const relatedProducts = getProducts(locale).filter((p) => p.id !== product.id).slice(0, 4);
+  const whatsappHref = getSalesWhatsAppHref(
+    `Hello CO EXPORT.ID, I want to discuss ${product.name}. Target quantity: ${product.minOrder}.`
+  );
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: `${siteConfig.url}${product.image}`,
+    description: product.description,
+    category: product.category,
+    brand: {
+      "@type": "Brand",
+      name: siteConfig.name,
+    },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: `${siteConfig.url}/products/${product.slug}`,
+    },
+  };
 
   return (
     <article className="bg-background py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <Button asChild variant="ghost" className="mb-6 px-0 text-muted-foreground hover:text-foreground">
           <Link href={hrefWithLocale("/products", locale)}>
@@ -156,6 +185,13 @@ export default async function ProductDetailPage({ params, searchParams }: Produc
 
               {/* CTA Buttons */}
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <AddToInquiryButton
+                  productId={product.id}
+                  productName={product.name}
+                  minOrder={product.minOrder}
+                  locale={locale}
+                  className="flex-1"
+                />
                 <Button
                   asChild
                   size="lg"
@@ -166,17 +202,19 @@ export default async function ProductDetailPage({ params, searchParams }: Produc
                     {mktCopy.requestQuote}
                   </Link>
                 </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="h-12 flex-1 border-[#1d6b4f]/20 text-[#1d6b4f] transition-all duration-300 hover:border-[#1d6b4f]/40 hover:bg-[#eef6f2] active:scale-[0.98]"
-                >
-                  <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="mr-2 size-4" />
-                    {mktCopy.chatWhatsapp}
-                  </a>
-                </Button>
+                {whatsappHref ? (
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="h-12 flex-1 border-[#1d6b4f]/20 text-[#1d6b4f] transition-all duration-300 hover:border-[#1d6b4f]/40 hover:bg-[#eef6f2] active:scale-[0.98]"
+                  >
+                    <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="mr-2 size-4" />
+                      {mktCopy.chatWhatsapp}
+                    </a>
+                  </Button>
+                ) : null}
               </div>
             </div>
           </Reveal>

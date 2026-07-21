@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { kv } from "@vercel/kv";
+import { createClient, kv } from "@vercel/kv";
 import { getPostBySlug, getPostStaticParams, Post } from "@/lib/cms";
 import { hrefWithLocale, resolveLocale, ui } from "@/lib/i18n";
 
@@ -32,11 +32,11 @@ export async function generateMetadata({ params, searchParams }: InsightPageProp
 
   if (!post && kvUrl && kvToken) {
     try {
-      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({ url: kvUrl, token: kvToken });
+      const redis = process.env.KV_REST_API_URL ? kv : createClient({ url: kvUrl, token: kvToken });
       const dynamicPosts: Post[] = await redis.get("dynamic-insights") || [];
       post = dynamicPosts.find((p: Post) => p.slug === slug);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -62,11 +62,11 @@ export default async function InsightDetailPage({ params, searchParams }: Insigh
 
   if (!post && kvUrl && kvToken) {
     try {
-      const redis = process.env.KV_REST_API_URL ? kv : require('@vercel/kv').createClient({ url: kvUrl, token: kvToken });
+      const redis = process.env.KV_REST_API_URL ? kv : createClient({ url: kvUrl, token: kvToken });
       const dynamicPosts: Post[] = await redis.get("dynamic-insights") || [];
       post = dynamicPosts.find((p: Post) => p.slug === slug);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
     }
   }
 

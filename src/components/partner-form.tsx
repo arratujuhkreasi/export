@@ -42,54 +42,32 @@ export function PartnerForm({ locale }: { locale: Locale }) {
 
   async function onSubmit(values: PartnerFormValues) {
     setIsSubmitting(true);
-    const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL;
 
     try {
-      if (webhookUrl) {
-        const response = await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+      const response = await fetch("/api/rfq", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "partner_application",
+          partner: {
             ...values,
-            type: "partner_application",
             language: locale,
-            source: "CO EXPORT.ID website",
-            submittedAt: new Date().toISOString(),
-          }),
-        });
+          },
+        }),
+      });
 
-        if (!response.ok) throw new Error("Webhook failed");
-        
-        toast.success(copy.successTitle, {
-          description: copy.successDesc,
-        });
-        reset();
-      } else {
-        // Fallback to WhatsApp
-        const waText = `Halo CO EXPORT.ID, saya ingin mendaftar sebagai mitra pasok.
-
-*Nama/Koordinator:* ${values.name}
-*No. WhatsApp:* ${values.whatsapp}
-*Lokasi:* ${values.location}
-*Komoditas:* ${values.commodity}
-*Kapasitas:* ${values.capacity}
-*Catatan:* ${values.notes || "-"}`;
-
-        const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(waText)}`;
-        window.open(waUrl, "_blank");
-        
-        toast.success(copy.successTitle, {
-          description: copy.successDesc,
-        });
-        reset();
+      if (!response.ok) {
+        throw new Error("Partner request failed");
       }
-    } catch (error) {
+
+      toast.success(copy.successTitle, {
+        description: copy.successDesc,
+      });
+      reset();
+    } catch {
       toast.error(copy.errorTitle, {
         description: copy.errorDesc,
       });
-      // Fallback to WhatsApp on error
-      const waUrl = `https://wa.me/6281234567890?text=Halo%20CO%20EXPORT.ID,%20saya%20ingin%20mendaftar%20sebagai%20mitra%20pasok.`;
-      window.open(waUrl, "_blank");
     } finally {
       setIsSubmitting(false);
     }

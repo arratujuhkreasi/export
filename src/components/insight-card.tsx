@@ -17,7 +17,7 @@ export function InsightCard({
   imageLoading?: "eager" | "lazy";
 }) {
   return (
-    <Card className="gradient-border card-lift group h-full overflow-hidden rounded-xl border-border/60 py-0 shadow-sm">
+    <Card className="marketplace-card group h-full overflow-hidden rounded-xl border border-border/60 bg-white p-0 shadow-sm transition-all duration-300 hover:border-[#1d6b4f]/30 hover:shadow-lg">
       <div className="relative aspect-[16/10] w-full overflow-hidden">
         <Image
           src={post.image}
