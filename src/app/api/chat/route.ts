@@ -58,7 +58,7 @@ STRICT INSTRUCTIONS & BOUNDARIES:
   `;
 
   const result = streamText({
-    model: cerebras.chat('gpt-oss-120b'),
+    model: cerebras.chat('llama3.3-70b'),
     system: systemPrompt,
     messages,
   });
