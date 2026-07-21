@@ -1,5 +1,6 @@
 import { streamText, convertToModelMessages } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
+import { NextResponse } from 'next/server';
 import { getProducts } from '@/lib/cms';
 
 export const maxDuration = 30;
@@ -13,12 +14,20 @@ const cerebras = createOpenAI({
 });
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  try {
+    const body = await req.json().catch(() => ({}));
+    console.log("Parsed body:", JSON.stringify(body));
+    const { messages } = body;
 
-  // Load products for rich context
-  const productsID = getProducts('id');
-  
-  const catalogContext = productsID.map(p => `
+    if (!messages) {
+      return NextResponse.json({ error: "Missing messages in request body" }, { status: 400 });
+    }
+
+    // Load products for rich context
+    const productsID = getProducts('id');
+    console.log("Loaded products count:", productsID?.length);
+    
+    const catalogContext = productsID.map(p => `
 Product Name: ${p.name}
 Category: ${p.category}
 Description: ${p.longDescription}
@@ -30,9 +39,9 @@ Incoterm: ${p.incoterm}
 HS Code: ${p.hsCode}
 Documents Provided: ${p.documents.join(', ')}
 Key Specs: ${JSON.stringify(p.specs)}
-  `).join('\n\n');
+    `).join('\n\n');
 
-  const systemPrompt = `
+    const systemPrompt = `
 You are "Admin", the official B2B export AI assistant for CO EXPORT.ID.
 Your sole purpose is to help global buyers with product information, MOQs, FOB pricing, and export documentation for CO EXPORT.ID's catalog.
 
@@ -55,13 +64,25 @@ STRICT INSTRUCTIONS & BOUNDARIES:
    - Always leave an empty line between paragraphs or lists.
    - Do NOT output any internal reasoning or "thinking" tags.
    - Always end your response with a polite closing, offering further assistance or directing them to sales@coexport.id for formal inquiries.
-  `;
+    `;
 
-  const result = streamText({
-    model: cerebras.chat('llama3.3-70b'),
-    system: systemPrompt,
-    messages: await convertToModelMessages(messages),
-  });
+    console.log("Calling streamText...");
+    const modelMessages = await convertToModelMessages(messages);
+    console.log("Converted model messages:", JSON.stringify(modelMessages));
 
-  return result.toTextStreamResponse();
+    const result = streamText({
+      model: cerebras.chat('llama3.3-70b'),
+      system: systemPrompt,
+      messages: modelMessages,
+    });
+
+    return result.toTextStreamResponse();
+  } catch (error: any) {
+    console.error("Chat API error:", error);
+    return NextResponse.json({
+      error: "Internal Server Error",
+      message: error.message,
+      stack: error.stack,
+    }, { status: 500 });
+  }
 }
