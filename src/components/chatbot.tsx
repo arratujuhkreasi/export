@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import { MessageCircle, X, Send, Bot, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ReactMarkdown from "react-markdown";
@@ -9,63 +10,35 @@ import ReactMarkdown from "react-markdown";
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  
-  const [messages, setMessages] = useState<Array<{id: string, role: string, content: string}>>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { messages, sendMessage, status } = useChat({
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+    }),
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isLoading = status === "submitted" || status === "streaming";
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    
-    const userMessage = { id: Date.now().toString(), role: "user", content: input };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
+    sendMessage({ text: input });
     setInput("");
-    setIsLoading(true);
+  };
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages })
-      });
-
-      if (!response.ok) throw new Error(response.statusText);
-      const reader = response.body?.getReader();
-      if (!reader) return;
-
-      const decoder = new TextDecoder();
-      let assistantMessage = "";
-      const assistantId = (Date.now() + 1).toString();
-
-      setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "" }]);
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        
-        const chunk = decoder.decode(value, { stream: true });
-        assistantMessage += chunk;
-        
-        setMessages(prev => {
-          const updated = [...prev];
-          const lastIndex = updated.length - 1;
-          if (updated[lastIndex].role === "assistant") {
-            updated[lastIndex].content = assistantMessage;
-          }
-          return updated;
-        });
-      }
-    } catch (error) {
-      console.error("Chat error:", error);
-    } finally {
-      setIsLoading(false);
+  const getMessageText = (m: any) => {
+    if (m.content) return m.content;
+    if (m.parts && Array.isArray(m.parts)) {
+      return m.parts
+        .filter((part: any) => part.type === "text")
+        .map((part: any) => part.text)
+        .join("");
     }
+    return "";
   };
 
   const scrollToBottom = () => {
@@ -75,6 +48,7 @@ export function Chatbot() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
 
   return (
     <>
@@ -126,7 +100,7 @@ export function Chatbot() {
                         }`}
                       >
                         <div className="prose prose-sm prose-emerald max-w-none leading-relaxed [&>p]:mb-3 last:[&>p]:mb-0 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:mb-3 [&>ul>li]:mb-1 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:mb-3 [&>ol>li]:mb-1 [&>strong]:font-semibold">
-                          <ReactMarkdown>{(m as any).content || (m as any).text || ""}</ReactMarkdown>
+                          <ReactMarkdown>{getMessageText(m)}</ReactMarkdown>
                         </div>
                       </div>
                     </div>
