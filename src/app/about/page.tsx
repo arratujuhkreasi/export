@@ -58,7 +58,7 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border/60 bg-white shadow-2xl">
                 <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
                 <Image
-                  src="/brand/co-export-logo-final.png"
+                  src="/brand/co-export-logo-uploaded.png"
                   alt={copy.imageAlt}
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
