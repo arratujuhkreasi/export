@@ -26,6 +26,27 @@ export async function POST(req: Request) {
     // Load products for rich context
     const productsID = getProducts('id');
     console.log("Loaded products count:", productsID?.length);
+
+    // TEMPORARY: Log API Key format (first 6 chars and length) for validation
+    const key = process.env.CEREBRAS_API_KEY || "";
+    console.log("CEREBRAS API KEY FORMAT:", {
+      length: key.length,
+      prefix: key.slice(0, 6),
+      suffix: key.slice(-4),
+    });
+
+    // TEMPORARY: Query Cerebras models to see valid names
+    try {
+      const modelsRes = await fetch("https://api.cerebras.ai/v1/models", {
+        headers: {
+          "Authorization": `Bearer ${process.env.CEREBRAS_API_KEY}`
+        }
+      });
+      const modelsData = await modelsRes.json();
+      console.log("CEREBRAS MODELS LIST:", JSON.stringify(modelsData));
+    } catch (err: any) {
+      console.error("Failed to fetch Cerebras models:", err.message);
+    }
     
     const catalogContext = productsID.map(p => `
 Product Name: ${p.name}
