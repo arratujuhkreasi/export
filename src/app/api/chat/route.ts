@@ -71,7 +71,7 @@ STRICT INSTRUCTIONS & BOUNDARIES:
     console.log("Converted model messages:", JSON.stringify(modelMessages));
 
     const result = streamText({
-      model: cerebras.chat('llama3.3-70b'),
+      model: cerebras.chat('llama-3.3-70b'),
       system: systemPrompt,
       messages: modelMessages,
     });
