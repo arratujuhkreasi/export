@@ -24,6 +24,7 @@ const navigation = [
   { href: "/about", key: "company" },
   { href: "/partnership", key: "partnership" },
   { href: "/insights", key: "insights" },
+  { href: "/how-to-buy", key: "howToBuy" },
   { href: "/contact", key: "contact" },
   { href: "/cart", key: "cart" },
 ] as const;

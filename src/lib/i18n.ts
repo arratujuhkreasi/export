@@ -28,6 +28,7 @@ export const ui = {
       company: "Our Company",
       partnership: "Become a Partner",
       insights: "Insights",
+      howToBuy: "How to Buy",
       contact: "Contact",
       quote: "Request Quote",
       cart: "Inquiry Cart",
@@ -144,6 +145,8 @@ export const ui = {
       button: "Subscribe",
     },
     howToOrder: {
+      pageTitle: "How to Buy",
+      pageDescription: "Understanding our B2B Request for Quotation (RFQ), negotiation, and shipment process.",
       eyebrow: "Export Process",
       title: "Secure & Transparent Export Journey",
       steps: [
@@ -364,6 +367,7 @@ export const ui = {
       company: "Perusahaan Kami",
       partnership: "Mitra Kami",
       insights: "Artikel",
+      howToBuy: "Cara Beli",
       contact: "Kontak",
       quote: "Minta Penawaran",
       cart: "Inquiry Cart",
@@ -480,6 +484,8 @@ export const ui = {
       button: "Langganan",
     },
     howToOrder: {
+      pageTitle: "Cara Membeli",
+      pageDescription: "Pahami proses Request for Quotation (RFQ) B2B, negosiasi, dan pengiriman kami.",
       eyebrow: "Proses Ekspor",
       title: "Alur Transaksi yang Aman & Transparan",
       steps: [
