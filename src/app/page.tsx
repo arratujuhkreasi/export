@@ -8,7 +8,7 @@ import { MarketplaceProductCard } from "@/components/marketplace-product-card";
 import { NewsletterSection } from "@/components/newsletter-section";
 import { PromoBanners } from "@/components/promo-banners";
 import { Reveal } from "@/components/reveal";
-import { Testimonials } from "@/components/testimonials";
+
 import { TrustBadges } from "@/components/trust-badges";
 import { Button } from "@/components/ui/button";
 import { getProducts } from "@/lib/cms";
@@ -130,8 +130,7 @@ export default async function Home({ searchParams }: HomeProps) {
       {/* Promo Banners */}
       <PromoBanners locale={locale} />
 
-      {/* Testimonials */}
-      <Testimonials locale={locale} />
+
 
       {/* Newsletter */}
       <NewsletterSection locale={locale} />
