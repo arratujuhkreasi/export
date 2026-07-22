@@ -246,7 +246,7 @@ export const ui = {
     },
     products: {
       title: "Products",
-      description: "CO EXPORT.ID catalog for coco peat, coco fiber, legal wood, Sumedang sweet potato, and young areca nut.",
+      description: "CO EXPORT.ID catalog for coco peat, coco fiber, Albasia wood, Ubi Cilembu Sumedang, and young areca nut.",
       pageTitle: "Export Marketplace",
       pageDescription: "Browse our full catalog of export-quality Indonesian commodities with FOB pricing, specifications, and documentation.",
       viewDetails: "View Details",
@@ -341,7 +341,7 @@ export const ui = {
         message: "Message",
       },
       placeholders: {
-        productInterest: "Coco peat, coco fiber, legal wood, Sumedang sweet potato, young areca nut...",
+        productInterest: "Coco peat, coco fiber, Albasia wood, Ubi Cilembu Sumedang, young areca nut...",
         message: "Target quantity, destination port, specification, Incoterm, document needs, and shipment timeline",
       },
       required: {
@@ -585,7 +585,7 @@ export const ui = {
     },
     products: {
       title: "Produk",
-      description: "Katalog CO EXPORT.ID untuk coco peat, coco fiber, kayu legal, ubi Sumedang, dan pinang muda.",
+      description: "Katalog CO EXPORT.ID untuk coco peat, coco fiber, kayu Albasia, Ubi Cilembu Sumedang, dan pinang muda.",
       pageTitle: "Marketplace Ekspor",
       pageDescription: "Jelajahi katalog lengkap komoditas ekspor Indonesia dengan harga FOB, spesifikasi, dan dokumentasi.",
       viewDetails: "Lihat Detail",
@@ -680,7 +680,7 @@ export const ui = {
         message: "Pesan",
       },
       placeholders: {
-        productInterest: "Coco peat, coco fiber, kayu legal, ubi Sumedang, pinang muda...",
+        productInterest: "Coco peat, coco fiber, kayu Albasia, Ubi Cilembu Sumedang, pinang muda...",
         message: "Target kuantitas, pelabuhan tujuan, spesifikasi, Incoterm, kebutuhan dokumen, dan timeline pengiriman",
       },
       required: {

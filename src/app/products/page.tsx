@@ -5,7 +5,7 @@ import ShopContent from "./shop-content";
 
 export const metadata: Metadata = {
   title: "Shop",
-  description: "CO EXPORT.ID export marketplace for coco peat, coco fiber, legal wood, Sumedang sweet potato, and young areca nut.",
+  description: "CO EXPORT.ID export marketplace for coco peat, coco fiber, Albasia wood, Ubi Cilembu Sumedang, and young areca nut.",
 };
 
 export default function ShopPage() {

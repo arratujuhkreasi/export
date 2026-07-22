@@ -298,8 +298,8 @@ const productRecords: ProductRecord[] = [
   },
   {
     id: "prd-wood",
-    slug: "legal-wood-pangandaran",
-    name: { en: "Legal Wood", id: "Kayu Legal" },
+    slug: "kayu-albasia",
+    name: { en: "Albasia Wood", id: "Kayu Albasia" },
     category: { en: "Certified Timber", id: "Kayu Bersertifikat" },
     categorySlug: "certified-timber",
     description: {
@@ -360,8 +360,8 @@ const productRecords: ProductRecord[] = [
   },
   {
     id: "prd-ubi",
-    slug: "ubi-sumedang",
-    name: { en: "Sumedang Sweet Potato", id: "Ubi Sumedang" },
+    slug: "ubi-cilembu-sumedang",
+    name: { en: "Ubi Cilembu Sumedang", id: "Ubi Cilembu Sumedang" },
     category: { en: "Fresh Agricultural Produce", id: "Hasil Pertanian Segar" },
     categorySlug: "fresh-produce",
     description: {

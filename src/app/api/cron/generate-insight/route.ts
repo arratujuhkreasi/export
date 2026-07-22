@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export const runtime = "edge";
 export const maxDuration = 60; // 60 seconds max
 
-const PRODUCTS = ["Coco Peat", "Coco Fiber", "Legal Wood", "Sumedang Sweet Potato", "Young Areca Nut"];
+const PRODUCTS = ["Coco Peat", "Coco Fiber", "Albasia Wood", "Ubi Cilembu Sumedang", "Young Areca Nut"];
 
 export async function GET(req: Request) {
   try {
