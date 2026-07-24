@@ -27,10 +27,11 @@ export function middleware(req: NextRequest) {
     hostname === 'admin.coexportid.com' ||
     hostname === 'admin.localhost:3000'
   ) {
-    // We rewrite the URL to point to the /erp route
-    // But we also preserve the path, so admin.coexportid.com/finance -> /erp/finance
-    url.pathname = `/erp${url.pathname === '/' ? '' : url.pathname}`;
-    return NextResponse.rewrite(url);
+    // If the pathname doesn't already start with /erp, we rewrite it
+    if (!url.pathname.startsWith('/erp')) {
+      url.pathname = `/erp${url.pathname === '/' ? '' : url.pathname}`;
+      return NextResponse.rewrite(url);
+    }
   }
 
   return NextResponse.next();
