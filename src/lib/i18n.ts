@@ -358,6 +358,23 @@ export const ui = {
         "Inquiry saved. Our sales workflow is not configured yet, so please email sales@coexport.id as backup.",
       error: "Inquiry could not be sent. Please email sales@coexport.id.",
     },
+    erp: {
+      finance: {
+        title: "Finance",
+        description: "Manage cash flow, income, and expenses.",
+        totalRevenue: "Total Revenue",
+        pendingReceivables: "Pending Receivables",
+        overdue: "Overdue",
+        totalCosts: "Total Costs",
+        tabs: {
+          cashFlow: "Cash Flow",
+          income: "Income",
+          expenses: "Expenses",
+        },
+        createInvoice: "Create Invoice",
+        recordTransaction: "Record Transaction",
+      }
+    }
   },
   id: {
     nav: {
@@ -697,5 +714,22 @@ export const ui = {
         "Inquiry tersimpan. Workflow sales belum dikonfigurasi, jadi mohon email sales@coexport.id sebagai backup.",
       error: "Inquiry tidak dapat dikirim. Silakan email sales@coexport.id.",
     },
+    erp: {
+      finance: {
+        title: "Keuangan",
+        description: "Kelola arus kas, pemasukan, dan pengeluaran.",
+        totalRevenue: "Total Pendapatan",
+        pendingReceivables: "Piutang Tertunda",
+        overdue: "Jatuh Tempo",
+        totalCosts: "Total Pengeluaran",
+        tabs: {
+          cashFlow: "Arus Kas",
+          income: "Pemasukan",
+          expenses: "Pengeluaran",
+        },
+        createInvoice: "Buat Tagihan",
+        recordTransaction: "Catat Transaksi",
+      }
+    }
   },
 } as const;

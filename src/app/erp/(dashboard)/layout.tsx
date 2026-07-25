@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { LayoutDashboard, Receipt, FileCheck2, Users, Settings } from "lucide-react";
+import { ERPLanguageSwitcher } from "@/components/erp-language-switcher";
 
 export const metadata = {
   title: "ERP Dashboard | CO EXPORT.ID",
@@ -39,7 +40,8 @@ export default function ERPLayout({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
-        <div className="p-4 border-t border-slate-800">
+        <ERPLanguageSwitcher />
+        <div className="p-4 border-t border-slate-800 mt-4">
           <div className="flex items-center gap-3">
             <div className="size-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs">
               AD

@@ -1,211 +1,363 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, MoreHorizontal, DollarSign, CreditCard, Receipt, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Search, DollarSign, CreditCard, Receipt, FileText, Plus, AlertCircle } from "lucide-react";
+import { resolveLocale, ui } from "@/lib/i18n";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
-const dummyInvoices = [
-  { id: "INV-2024-089", client: "Global Foods Inc.", amount: "$45,200", status: "Paid", date: "2024-05-15", dueDate: "2024-06-15" },
-  { id: "INV-2024-090", client: "Euro Spices Ltd", amount: "$12,450", status: "Pending", date: "2024-05-18", dueDate: "2024-06-18" },
-  { id: "INV-2024-091", client: "Asian Marts", amount: "$8,900", status: "Overdue", date: "2024-04-10", dueDate: "2024-05-10" },
-  { id: "INV-2024-092", client: "North Traders", amount: "$32,100", status: "Draft", date: "2024-05-20", dueDate: "2024-06-20" },
-];
+function FinanceModuleContent() {
+  const searchParams = useSearchParams();
+  const locale = resolveLocale(searchParams.get("lang") ?? undefined);
+  const copy = ui[locale].erp.finance;
 
-const dummyCosts = [
-  { id: "FOB-001", orderRef: "ORD-1023", category: "Trucking", description: "Warehouse to Port Tanjung Priok", amount: "Rp 3,500,000", date: "2024-05-12" },
-  { id: "FOB-002", orderRef: "ORD-1023", category: "Customs", description: "PEB & COO Handling", amount: "Rp 1,200,000", date: "2024-05-13" },
-  { id: "FOB-003", orderRef: "ORD-1024", category: "Fumigation", description: "Phytosanitary treatment", amount: "Rp 850,000", date: "2024-05-15" },
-];
+  const [activeTab, setActiveTab] = useState<"invoices" | "income" | "expenses">("invoices");
+  
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  
+  const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+  const [isTransactionOpen, setIsTransactionOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-export default function FinanceModule() {
-  const [activeTab, setActiveTab] = useState<"invoices" | "fob">("invoices");
+  useEffect(() => {
+    fetchInvoices();
+    fetchTransactions();
+  }, []);
+
+  async function fetchInvoices() {
+    const res = await fetch("/api/finance/invoices");
+    if (res.ok) setInvoices(await res.json());
+  }
+
+  async function fetchTransactions() {
+    const res = await fetch("/api/finance/transactions");
+    if (res.ok) setTransactions(await res.json());
+  }
+
+  async function handleCreateInvoice(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      buyerName: formData.get("buyerName"),
+      amount: formData.get("amount"),
+      status: formData.get("status"),
+      dueDate: formData.get("dueDate"),
+    };
+
+    const res = await fetch("/api/finance/invoices", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      setIsInvoiceOpen(false);
+      fetchInvoices();
+    }
+    setIsSubmitting(false);
+  }
+
+  async function handleRecordTransaction(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      type: formData.get("type"),
+      category: formData.get("category"),
+      amount: formData.get("amount"),
+      description: formData.get("description"),
+      date: formData.get("date"),
+    };
+
+    const res = await fetch("/api/finance/transactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      setIsTransactionOpen(false);
+      fetchTransactions();
+    }
+    setIsSubmitting(false);
+  }
+
+  const income = transactions.filter(t => t.type === "INCOME");
+  const expenses = transactions.filter(t => t.type === "EXPENSE");
+  
+  const totalRevenue = income.reduce((acc, t) => acc + t.amount, 0);
+  const totalCosts = expenses.reduce((acc, t) => acc + t.amount, 0);
+  const pendingReceivables = invoices.filter(i => i.status === "PENDING" || i.status === "DRAFT").reduce((acc, i) => acc + i.amount, 0);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Finance</h1>
-          <p className="text-muted-foreground mt-1">Manage invoices, payments, and FOB operational costs.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">{copy.title}</h1>
+          <p className="text-muted-foreground mt-1">{copy.description}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="mr-2 h-4 w-4" />
-            Filter
-          </Button>
-          <Button size="sm">Create Invoice</Button>
+          
+          <Dialog open={isTransactionOpen} onOpenChange={setIsTransactionOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Plus className="mr-2 h-4 w-4" />
+                {copy.recordTransaction}
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{copy.recordTransaction}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleRecordTransaction} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Type</Label>
+                    <select name="type" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                      <option value="INCOME">Income</option>
+                      <option value="EXPENSE">Expense</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Category</Label>
+                    <Input name="category" required placeholder="e.g. Sales, Logistics" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Amount</Label>
+                  <Input type="number" name="amount" required min="0" step="0.01" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Date</Label>
+                  <Input type="date" name="date" defaultValue={new Date().toISOString().split('T')[0]} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Description</Label>
+                  <Input name="description" />
+                </div>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save Transaction"}
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isInvoiceOpen} onOpenChange={setIsInvoiceOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <Plus className="mr-2 h-4 w-4" />
+                {copy.createInvoice}
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{copy.createInvoice}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleCreateInvoice} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Buyer Name</Label>
+                  <Input name="buyerName" required />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Amount</Label>
+                    <Input type="number" name="amount" required min="0" step="0.01" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Status</Label>
+                    <select name="status" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                      <option value="DRAFT">Draft</option>
+                      <option value="PENDING">Pending</option>
+                      <option value="PAID">Paid</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Due Date</Label>
+                  <Input type="date" name="dueDate" />
+                </div>
+                <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Create Invoice"}
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue (YTD)</CardTitle>
+            <CardTitle className="text-sm font-medium">{copy.totalRevenue}</CardTitle>
             <DollarSign className="h-4 w-4 text-emerald-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$245,231.89</div>
-            <p className="text-xs text-muted-foreground">+12% from last year</p>
+            <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Receivables</CardTitle>
+            <CardTitle className="text-sm font-medium">{copy.pendingReceivables}</CardTitle>
             <CreditCard className="h-4 w-4 text-amber-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$42,350.00</div>
-            <p className="text-xs text-muted-foreground">3 invoices pending</p>
+            <div className="text-2xl font-bold">${pendingReceivables.toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overdue</CardTitle>
-            <Receipt className="h-4 w-4 text-red-600" />
+            <CardTitle className="text-sm font-medium">{copy.totalCosts}</CardTitle>
+            <FileText className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">$8,900.00</div>
-            <p className="text-xs text-muted-foreground">1 invoice overdue</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total FOB Costs (MTD)</CardTitle>
-            <FileText className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Rp 12.5M</div>
-            <p className="text-xs text-muted-foreground">Across 4 shipments</p>
+            <div className="text-2xl font-bold text-red-600">${totalCosts.toLocaleString()}</div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="flex gap-4 border-b border-gray-200 mt-8">
+      <div className="flex gap-4 border-b border-gray-200 mt-8 overflow-x-auto">
         <button
           onClick={() => setActiveTab("invoices")}
-          className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
+          className={`pb-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
             activeTab === "invoices"
               ? "border-emerald-600 text-emerald-600"
               : "border-transparent text-gray-500 hover:text-gray-700"
           }`}
         >
-          Proforma & Commercial Invoices
+          {copy.tabs.cashFlow || "Invoices"}
         </button>
         <button
-          onClick={() => setActiveTab("fob")}
-          className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
-            activeTab === "fob"
+          onClick={() => setActiveTab("income")}
+          className={`pb-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
+            activeTab === "income"
               ? "border-emerald-600 text-emerald-600"
               : "border-transparent text-gray-500 hover:text-gray-700"
           }`}
         >
-          FOB Cost Tracking
+          {copy.tabs.income}
+        </button>
+        <button
+          onClick={() => setActiveTab("expenses")}
+          className={`pb-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
+            activeTab === "expenses"
+              ? "border-emerald-600 text-emerald-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          {copy.tabs.expenses}
         </button>
       </div>
 
-      <div className="flex items-center gap-4 mb-4">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input placeholder={`Search ${activeTab}...`} className="pl-9" />
-        </div>
-      </div>
-
-      {activeTab === "invoices" && (
-        <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
+      <Card className="overflow-hidden">
+        <div className="overflow-x-auto">
+          {activeTab === "invoices" && (
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
                 <tr>
                   <th className="px-6 py-4">Invoice ID</th>
                   <th className="px-6 py-4">Client</th>
                   <th className="px-6 py-4">Amount</th>
-                  <th className="px-6 py-4">Issue Date</th>
                   <th className="px-6 py-4">Due Date</th>
                   <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {dummyInvoices.map((invoice) => (
+                {invoices.length === 0 ? (
+                  <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-500">No invoices found.</td></tr>
+                ) : invoices.map((invoice) => (
                   <tr key={invoice.id} className="bg-white border-b hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{invoice.id}</td>
-                    <td className="px-6 py-4">{invoice.client}</td>
-                    <td className="px-6 py-4 font-medium">{invoice.amount}</td>
-                    <td className="px-6 py-4 text-gray-500">{invoice.date}</td>
-                    <td className="px-6 py-4 text-gray-500">{invoice.dueDate}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{invoice.invoiceNo}</td>
+                    <td className="px-6 py-4">{invoice.buyerName}</td>
+                    <td className="px-6 py-4 font-medium">${invoice.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-gray-500">{invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString() : "-"}</td>
                     <td className="px-6 py-4">
-                      <Badge
-                        variant={
-                          invoice.status === "Paid" ? "secondary" :
-                          invoice.status === "Pending" ? "default" :
-                          invoice.status === "Draft" ? "outline" :
-                          "destructive"
-                        }
-                        className={
-                          invoice.status === "Paid" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-100" :
-                          invoice.status === "Pending" ? "bg-amber-100 text-amber-800 hover:bg-amber-100" :
-                          invoice.status === "Overdue" ? "bg-red-100 text-red-800 hover:bg-red-100" :
-                          "bg-gray-100 text-gray-800 hover:bg-gray-100"
-                        }
-                      >
+                      <Badge variant="outline" className={
+                        invoice.status === "PAID" ? "bg-emerald-50 text-emerald-700" :
+                        invoice.status === "PENDING" ? "bg-amber-50 text-amber-700" :
+                        "bg-gray-50 text-gray-700"
+                      }>
                         {invoice.status}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        </Card>
-      )}
+          )}
 
-      {activeTab === "fob" && (
-        <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
+          {activeTab === "income" && (
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
                 <tr>
-                  <th className="px-6 py-4">Record ID</th>
-                  <th className="px-6 py-4">Order Ref</th>
+                  <th className="px-6 py-4">Date</th>
                   <th className="px-6 py-4">Category</th>
                   <th className="px-6 py-4">Description</th>
-                  <th className="px-6 py-4">Date</th>
-                  <th className="px-6 py-4">Amount</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-6 py-4 text-right">Amount</th>
                 </tr>
               </thead>
               <tbody>
-                {dummyCosts.map((cost) => (
-                  <tr key={cost.id} className="bg-white border-b hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{cost.id}</td>
-                    <td className="px-6 py-4 text-blue-600 hover:underline cursor-pointer">{cost.orderRef}</td>
-                    <td className="px-6 py-4">
-                      <Badge variant="outline" className="bg-slate-50 text-slate-700">
-                        {cost.category}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">{cost.description}</td>
-                    <td className="px-6 py-4 text-gray-500">{cost.date}</td>
-                    <td className="px-6 py-4 font-medium">{cost.amount}</td>
-                    <td className="px-6 py-4 text-right">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </td>
+                {income.length === 0 ? (
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-gray-500">No income records found.</td></tr>
+                ) : income.map((t) => (
+                  <tr key={t.id} className="bg-white border-b hover:bg-gray-50">
+                    <td className="px-6 py-4 text-gray-500">{new Date(t.date).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 font-medium">{t.category}</td>
+                    <td className="px-6 py-4 text-gray-600">{t.description || "-"}</td>
+                    <td className="px-6 py-4 text-emerald-600 font-medium text-right">+ ${t.amount.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        </Card>
-      )}
+          )}
+
+          {activeTab === "expenses" && (
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                <tr>
+                  <th className="px-6 py-4">Date</th>
+                  <th className="px-6 py-4">Category</th>
+                  <th className="px-6 py-4">Description</th>
+                  <th className="px-6 py-4 text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expenses.length === 0 ? (
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-gray-500">No expense records found.</td></tr>
+                ) : expenses.map((t) => (
+                  <tr key={t.id} className="bg-white border-b hover:bg-gray-50">
+                    <td className="px-6 py-4 text-gray-500">{new Date(t.date).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 font-medium">{t.category}</td>
+                    <td className="px-6 py-4 text-gray-600">{t.description || "-"}</td>
+                    <td className="px-6 py-4 text-red-600 font-medium text-right">- ${t.amount.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </Card>
     </div>
+  );
+}
+
+export default function FinanceModule() {
+  return (
+    <Suspense fallback={<div className="h-32 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+      <FinanceModuleContent />
+    </Suspense>
   );
 }
