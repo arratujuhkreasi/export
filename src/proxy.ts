@@ -31,8 +31,10 @@ export default function middleware(req: NextRequest) {
     }
     
     // Rewrite to the /(erp) route
-    url.pathname = `/erp${url.pathname === "/" ? "" : url.pathname}`;
-    return NextResponse.rewrite(url);
+    if (!url.pathname.startsWith("/erp")) {
+      url.pathname = `/erp${url.pathname === "/" ? "" : url.pathname}`;
+      return NextResponse.rewrite(url);
+    }
   }
 
   return NextResponse.next();
