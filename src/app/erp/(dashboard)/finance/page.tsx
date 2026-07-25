@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, DollarSign, CreditCard, Receipt, FileText, Plus, AlertCircle } from "lucide-react";
+import { Search, DollarSign, CreditCard, Receipt, FileText, Plus, AlertCircle, Printer } from "lucide-react";
 import { resolveLocale, ui } from "@/lib/i18n";
 import {
   Dialog,
@@ -30,8 +30,10 @@ function FinanceModuleContent() {
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
   const [isTransactionOpen, setIsTransactionOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     fetchInvoices();
     fetchTransactions();
   }, []);
@@ -111,6 +113,11 @@ function FinanceModuleContent() {
         </div>
         <div className="flex items-center gap-2">
           
+          <Button variant="outline" size="sm" onClick={() => window.print()} className="hidden sm:flex">
+            <Printer className="mr-2 h-4 w-4" />
+            Print Report
+          </Button>
+
           <Button variant="outline" size="sm" onClick={() => setIsTransactionOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             {copy.recordTransaction}
@@ -140,7 +147,7 @@ function FinanceModuleContent() {
                 </div>
                 <div className="space-y-2">
                   <Label>Date</Label>
-                  <Input type="date" name="date" defaultValue={new Date().toISOString().split('T')[0]} />
+                  <Input type="date" name="date" required />
                 </div>
                 <div className="space-y-2">
                   <Label>Description</Label>
@@ -202,7 +209,7 @@ function FinanceModuleContent() {
             <DollarSign className="h-4 w-4 text-emerald-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
+            <div className="text-2xl font-bold">${mounted ? totalRevenue.toLocaleString() : totalRevenue}</div>
           </CardContent>
         </Card>
         <Card>
@@ -211,7 +218,7 @@ function FinanceModuleContent() {
             <CreditCard className="h-4 w-4 text-amber-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${pendingReceivables.toLocaleString()}</div>
+            <div className="text-2xl font-bold">${mounted ? pendingReceivables.toLocaleString() : pendingReceivables}</div>
           </CardContent>
         </Card>
         <Card>
@@ -220,7 +227,7 @@ function FinanceModuleContent() {
             <FileText className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">${totalCosts.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-red-600">${mounted ? totalCosts.toLocaleString() : totalCosts}</div>
           </CardContent>
         </Card>
       </div>
@@ -278,8 +285,8 @@ function FinanceModuleContent() {
                   <tr key={invoice.id} className="bg-white border-b hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 font-medium text-gray-900">{invoice.invoiceNo}</td>
                     <td className="px-6 py-4">{invoice.buyerName}</td>
-                    <td className="px-6 py-4 font-medium">${invoice.amount.toLocaleString()}</td>
-                    <td className="px-6 py-4 text-gray-500">{invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString() : "-"}</td>
+                    <td className="px-6 py-4 font-medium">${mounted ? invoice.amount.toLocaleString() : invoice.amount}</td>
+                    <td className="px-6 py-4 text-gray-500">{invoice.dueDate && mounted ? new Date(invoice.dueDate).toLocaleDateString() : "-"}</td>
                     <td className="px-6 py-4">
                       <Badge variant="outline" className={
                         invoice.status === "PAID" ? "bg-emerald-50 text-emerald-700" :
@@ -310,10 +317,10 @@ function FinanceModuleContent() {
                   <tr><td colSpan={4} className="px-6 py-8 text-center text-gray-500">No income records found.</td></tr>
                 ) : income.map((t) => (
                   <tr key={t.id} className="bg-white border-b hover:bg-gray-50">
-                    <td className="px-6 py-4 text-gray-500">{new Date(t.date).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 text-gray-500">{mounted ? new Date(t.date).toLocaleDateString() : ""}</td>
                     <td className="px-6 py-4 font-medium">{t.category}</td>
                     <td className="px-6 py-4 text-gray-600">{t.description || "-"}</td>
-                    <td className="px-6 py-4 text-emerald-600 font-medium text-right">+ ${t.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-emerald-600 font-medium text-right">+ ${mounted ? t.amount.toLocaleString() : t.amount}</td>
                   </tr>
                 ))}
               </tbody>
@@ -335,10 +342,10 @@ function FinanceModuleContent() {
                   <tr><td colSpan={4} className="px-6 py-8 text-center text-gray-500">No expense records found.</td></tr>
                 ) : expenses.map((t) => (
                   <tr key={t.id} className="bg-white border-b hover:bg-gray-50">
-                    <td className="px-6 py-4 text-gray-500">{new Date(t.date).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 text-gray-500">{mounted ? new Date(t.date).toLocaleDateString() : ""}</td>
                     <td className="px-6 py-4 font-medium">{t.category}</td>
                     <td className="px-6 py-4 text-gray-600">{t.description || "-"}</td>
-                    <td className="px-6 py-4 text-red-600 font-medium text-right">- ${t.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-red-600 font-medium text-right">- ${mounted ? t.amount.toLocaleString() : t.amount}</td>
                   </tr>
                 ))}
               </tbody>

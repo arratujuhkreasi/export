@@ -20,7 +20,7 @@ export default function ERPLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col">
+      <aside className="w-64 bg-slate-900 text-white flex flex-col print:hidden">
         <div className="p-6">
           <h1 className="text-2xl font-bold tracking-tight">ERP System</h1>
           <p className="text-xs text-slate-400 mt-1">CO EXPORT.ID</p>
@@ -56,7 +56,7 @@ export default function ERPLayout({ children }: { children: ReactNode }) {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center px-8 shadow-sm z-10">
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center px-8 shadow-sm z-10 print:hidden">
           <h2 className="text-lg font-semibold text-gray-800">Admin Dashboard</h2>
         </header>
         <div className="flex-1 overflow-auto p-8">
