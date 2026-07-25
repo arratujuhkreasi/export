@@ -43,17 +43,33 @@ model Transaction {
 model Supplier {
   id        String   @id @default(cuid())
   name      String
-  product   String
+  category  String
+  location  String
   status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Document {
+model Inquiry {
   id        String   @id @default(cuid())
-  type      String   // SVLK, COO, PHYTO
-  status    String   @default("PENDING") // PENDING, APPROVED, EXPIRED
-  shipment  String
+  rfqNo     String   @unique
+  buyer     String
+  product   String
+  volume    String
+  status    String   @default("PENDING") // Pending, Quoted, In Discussion, Rejected
+  date      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Shipment {
+  id          String   @id @default(cuid())
+  shipmentId  String   @unique
+  orderRef    String
+  destination String
+  status      String   @default("In Progress") // In Progress, Cleared, Action Required
+  etd         DateTime?
+  documents   String?  // JSON string representing docs status { invoice: "Ready", coo: "Pending" ... }
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

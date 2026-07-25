@@ -1,27 +1,83 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, MoreHorizontal, UserCheck, Clock, XCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
-
-const dummyInquiries = [
-  { id: "RFQ-2024-001", buyer: "Global Foods Inc.", product: "Arabica Coffee Beans", volume: "20 MT", status: "Pending", date: "2024-05-12" },
-  { id: "RFQ-2024-002", buyer: "Euro Spices Ltd", product: "Black Pepper", volume: "5 MT", status: "Quoted", date: "2024-05-10" },
-  { id: "RFQ-2024-003", buyer: "Asian Marts", product: "Cassava Chips", volume: "10 MT", status: "Rejected", date: "2024-05-08" },
-  { id: "RFQ-2024-004", buyer: "North Traders", product: "Palm Sugar", volume: "15 MT", status: "In Discussion", date: "2024-05-05" },
-];
-
-const dummySuppliers = [
-  { id: "SUP-001", name: "PT Kopi Abadi", category: "Coffee", location: "Sumatra", status: "Approved", joined: "2024-01-15" },
-  { id: "SUP-002", name: "CV Rempah Jaya", category: "Spices", location: "Java", status: "Reviewing", joined: "2024-05-11" },
-  { id: "SUP-003", name: "Agro Nusantara", category: "Snacks", location: "Bali", status: "Rejected", joined: "2024-04-20" },
-];
+import { Search, Filter, MoreHorizontal, UserCheck, Clock, XCircle, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 export default function CRMModule() {
   const [activeTab, setActiveTab] = useState<"inquiries" | "suppliers">("inquiries");
+  
+  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [suppliers, setSuppliers] = useState<any[]>([]);
+  const [mounted, setMounted] = useState(false);
+  
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const [isSupplierOpen, setIsSupplierOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    fetchInquiries();
+    fetchSuppliers();
+  }, []);
+
+  async function fetchInquiries() {
+    try {
+      const res = await fetch("/api/crm/inquiries");
+      if (res.ok) setInquiries(await res.json());
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function fetchSuppliers() {
+    try {
+      const res = await fetch("/api/crm/suppliers");
+      if (res.ok) setSuppliers(await res.json());
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function handleAddInquiry(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    try {
+      await fetch("/api/crm/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      setIsInquiryOpen(false);
+      fetchInquiries();
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleAddSupplier(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    try {
+      await fetch("/api/crm/suppliers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      setIsSupplierOpen(false);
+      fetchSuppliers();
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -31,13 +87,83 @@ export default function CRMModule() {
           <p className="text-muted-foreground mt-1">Manage buyer inquiries and supplier applications.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="mr-2 h-4 w-4" />
-            Filter
-          </Button>
-          <Button size="sm">Export Data</Button>
+          {activeTab === "inquiries" ? (
+            <Button size="sm" onClick={() => setIsInquiryOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add RFQ
+            </Button>
+          ) : (
+            <Button size="sm" onClick={() => setIsSupplierOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Supplier
+            </Button>
+          )}
         </div>
       </div>
+
+      <Dialog open={isInquiryOpen} onOpenChange={setIsInquiryOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Buyer Inquiry</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleAddInquiry} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">RFQ Number</label>
+                <Input name="rfqNo" required placeholder="RFQ-2024-..." />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Buyer Name</label>
+                <Input name="buyer" required />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Product</label>
+                <Input name="product" required />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Volume</label>
+                <Input name="volume" required placeholder="e.g. 20 MT" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Save Inquiry"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSupplierOpen} onOpenChange={setIsSupplierOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Supplier</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleAddSupplier} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Supplier Name</label>
+              <Input name="name" required />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Category</label>
+                <Input name="category" required placeholder="Coffee, Spices..." />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Location</label>
+                <Input name="location" required />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Save Supplier"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <div className="flex gap-4 border-b border-gray-200">
         <button
@@ -85,31 +211,27 @@ export default function CRMModule() {
                 </tr>
               </thead>
               <tbody>
-                {dummyInquiries.map((inquiry) => (
+                {inquiries.length === 0 ? (
+                  <tr><td colSpan={7} className="px-6 py-8 text-center text-gray-500">No inquiries found.</td></tr>
+                ) : inquiries.map((inquiry) => (
                   <tr key={inquiry.id} className="bg-white border-b hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{inquiry.id}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{inquiry.rfqNo}</td>
                     <td className="px-6 py-4">{inquiry.buyer}</td>
                     <td className="px-6 py-4">{inquiry.product}</td>
                     <td className="px-6 py-4">{inquiry.volume}</td>
                     <td className="px-6 py-4">
                       <Badge
                         variant={
-                          inquiry.status === "Pending" ? "default" :
-                          inquiry.status === "Quoted" ? "secondary" :
-                          inquiry.status === "In Discussion" ? "outline" :
+                          inquiry.status === "PENDING" ? "default" :
+                          inquiry.status === "QUOTED" ? "secondary" :
+                          inquiry.status === "IN DISCUSSION" ? "outline" :
                           "destructive"
-                        }
-                        className={
-                          inquiry.status === "Pending" ? "bg-amber-100 text-amber-800 hover:bg-amber-100" :
-                          inquiry.status === "Quoted" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-100" :
-                          inquiry.status === "In Discussion" ? "bg-blue-100 text-blue-800 hover:bg-blue-100" :
-                          ""
                         }
                       >
                         {inquiry.status}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 text-gray-500">{inquiry.date}</td>
+                    <td className="px-6 py-4 text-gray-500">{mounted ? new Date(inquiry.date).toLocaleDateString() : ""}</td>
                     <td className="px-6 py-4 text-right">
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
                         <MoreHorizontal className="h-4 w-4" />
@@ -129,8 +251,7 @@ export default function CRMModule() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
                 <tr>
-                  <th className="px-6 py-4">Supplier ID</th>
-                  <th className="px-6 py-4">Name</th>
+                  <th className="px-6 py-4">Supplier Name</th>
                   <th className="px-6 py-4">Category</th>
                   <th className="px-6 py-4">Location</th>
                   <th className="px-6 py-4">Status</th>
@@ -139,32 +260,25 @@ export default function CRMModule() {
                 </tr>
               </thead>
               <tbody>
-                {dummySuppliers.map((supplier) => (
+                {suppliers.length === 0 ? (
+                  <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-500">No suppliers found.</td></tr>
+                ) : suppliers.map((supplier) => (
                   <tr key={supplier.id} className="bg-white border-b hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{supplier.id}</td>
-                    <td className="px-6 py-4">{supplier.name}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{supplier.name}</td>
                     <td className="px-6 py-4">{supplier.category}</td>
                     <td className="px-6 py-4">{supplier.location}</td>
                     <td className="px-6 py-4">
                       <Badge
                         variant={
-                          supplier.status === "Approved" ? "secondary" :
-                          supplier.status === "Reviewing" ? "default" :
+                          supplier.status === "APPROVED" ? "secondary" :
+                          supplier.status === "PENDING" ? "default" :
                           "destructive"
                         }
-                        className={
-                          supplier.status === "Approved" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-100" :
-                          supplier.status === "Reviewing" ? "bg-blue-100 text-blue-800 hover:bg-blue-100" :
-                          ""
-                        }
                       >
-                        {supplier.status === "Approved" && <UserCheck className="mr-1 h-3 w-3" />}
-                        {supplier.status === "Reviewing" && <Clock className="mr-1 h-3 w-3" />}
-                        {supplier.status === "Rejected" && <XCircle className="mr-1 h-3 w-3" />}
                         {supplier.status}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 text-gray-500">{supplier.joined}</td>
+                    <td className="px-6 py-4 text-gray-500">{mounted ? new Date(supplier.createdAt).toLocaleDateString() : ""}</td>
                     <td className="px-6 py-4 text-right">
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
                         <MoreHorizontal className="h-4 w-4" />
