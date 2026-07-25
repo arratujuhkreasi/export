@@ -1,24 +1,25 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
-
+import { PrismaLibSQL } from "@prisma/adapter-libsql";
+import { createClient } from "@libsql/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-// In development, the client might be instantiated multiple times if we don't attach it to global.
 export const prisma =
   globalForPrisma.prisma ??
   (() => {
-    // If DATABASE_URL is not set (e.g. during build), fallback to local SQLite memory or file so it doesn't crash.
     const url = process.env.DATABASE_URL || "file:./dev.db";
-    const adapter = new PrismaLibSql({
-      url,
-      // If authToken is not in the URL, you could pass it here, but Prisma schema handles URL with query params
-      // We will allow the URL to contain authToken for simplicity.
-    });
+    const authToken = process.env.DATABASE_AUTH_TOKEN;
     
-    return new PrismaClient({ adapter });
+    // We only use libSQL adapter if it's a remote URL
+    if (url.startsWith("libsql://") || url.startsWith("https://")) {
+      const libsql = createClient({ url, authToken });
+      const adapter = new PrismaLibSQL(libsql);
+      return new PrismaClient({ adapter });
+    }
+    
+    return new PrismaClient();
   })();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
