@@ -111,13 +111,11 @@ function FinanceModuleContent() {
         </div>
         <div className="flex items-center gap-2">
           
+          <Button variant="outline" size="sm" onClick={() => setIsTransactionOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            {copy.recordTransaction}
+          </Button>
           <Dialog open={isTransactionOpen} onOpenChange={setIsTransactionOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                {copy.recordTransaction}
-              </Button>
-            </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{copy.recordTransaction}</DialogTitle>
@@ -155,13 +153,11 @@ function FinanceModuleContent() {
             </DialogContent>
           </Dialog>
 
+          <Button size="sm" onClick={() => setIsInvoiceOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            {copy.createInvoice}
+          </Button>
           <Dialog open={isInvoiceOpen} onOpenChange={setIsInvoiceOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                {copy.createInvoice}
-              </Button>
-            </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{copy.createInvoice}</DialogTitle>
