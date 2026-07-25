@@ -1,14 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
-
-const libsql = createClient({
-  url: process.env.DATABASE_URL!,
-});
-
-const adapter = new PrismaLibSQL(libsql);
-const prisma = new PrismaClient({ adapter });
+import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -55,7 +46,7 @@ export async function PATCH(req: Request) {
     const shipment = await prisma.shipment.findUnique({ where: { id } });
     if (!shipment) return NextResponse.json({ error: "Shipment not found" }, { status: 404 });
     
-    let docs = {};
+    let docs: Record<string, string> = {};
     if (shipment.documents) {
       docs = JSON.parse(shipment.documents);
     }

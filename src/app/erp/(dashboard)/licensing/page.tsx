@@ -9,9 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const renderDocStatus = (status: string) => {
-  if (status === "Ready") return <CheckCircle2 className="h-4 w-4 text-emerald-500" title="Ready" />;
-  if (status === "Pending" || status === "Draft") return <Clock className="h-4 w-4 text-amber-500" title="Pending" />;
-  if (status === "Action Required") return <AlertCircle className="h-4 w-4 text-red-500" title="Action Required" />;
+  if (status === "Ready") return <span title="Ready"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></span>;
+  if (status === "Pending" || status === "Draft") return <span title="Pending"><Clock className="h-4 w-4 text-amber-500" /></span>;
+  if (status === "Action Required") return <span title="Action Required"><AlertCircle className="h-4 w-4 text-red-500" /></span>;
   return <span className="text-xs text-gray-400" title="Not Required">-</span>;
 };
 
