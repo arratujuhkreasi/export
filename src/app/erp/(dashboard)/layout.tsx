@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { LayoutDashboard, Receipt, FileCheck2, Users, Settings } from "lucide-react";
+import { LayoutDashboard, Receipt, FileCheck2, Users, Settings, BookOpen, BarChart3 } from "lucide-react";
 import { ERPLanguageSwitcher } from "@/components/erp-language-switcher";
 
 export const metadata = {
@@ -11,6 +11,8 @@ export const metadata = {
 const navItems = [
   { label: "Dashboard", href: "/erp", icon: LayoutDashboard },
   { label: "Finance", href: "/erp/finance", icon: Receipt },
+  { label: "Accounting", href: "/erp/accounting", icon: BookOpen },
+  { label: "Reports", href: "/erp/reports", icon: BarChart3 },
   { label: "Licensing & Docs", href: "/erp/licensing", icon: FileCheck2 },
   { label: "CRM", href: "/erp/crm", icon: Users },
   { label: "Settings", href: "/erp/settings", icon: Settings },
