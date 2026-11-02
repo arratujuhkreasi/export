@@ -235,7 +235,7 @@ const inquiryOnlyProduct = (product: {
 
 const additionalProductRecords: ProductRecord[] = [
   inquiryOnlyProduct({
-    id: "prd-gayo-whine-coffee", slug: "kopi-gayo-whine", image: "/products/kopi-gayo-whine.svg",
+    id: "prd-gayo-whine-coffee", slug: "kopi-gayo-whine", image: "/products/kopi-gayo-whine.jpg",
     name: { en: "Gayo Whine Coffee", id: "Kopi Gayo Whine" },
     category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
     description: { en: "Gayo coffee listing. Processing method, grade, and product form are confirmed with the buyer.", id: "Listing kopi Gayo. Metode proses, grade, dan bentuk produk dikonfirmasi bersama pembeli." },
@@ -243,7 +243,7 @@ const additionalProductRecords: ProductRecord[] = [
     applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
   }),
   inquiryOnlyProduct({
-    id: "prd-gayo-mid-grade", slug: "kopi-gayo-kualitas-menengah", image: "/products/kopi-gayo-kualitas-menengah.svg",
+    id: "prd-gayo-mid-grade", slug: "kopi-gayo-kualitas-menengah", image: "/products/kopi-gayo-kualitas-menengah.jpg",
     name: { en: "Gayo Coffee, Mid Grade", id: "Kopi Gayo Kualitas Menengah" },
     category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
     description: { en: "Gayo coffee listing for the mid-grade range; grade criteria and product form are confirmed with the buyer.", id: "Listing kopi Gayo untuk rentang kualitas menengah; kriteria grade dan bentuk produk dikonfirmasi bersama pembeli." },
@@ -251,7 +251,7 @@ const additionalProductRecords: ProductRecord[] = [
     applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
   }),
   inquiryOnlyProduct({
-    id: "prd-gayo-grade-one", slug: "kopi-gayo-kualitas-1", image: "/products/kopi-gayo-kualitas-1.svg",
+    id: "prd-gayo-grade-one", slug: "kopi-gayo-kualitas-1", image: "/products/kopi-gayo-kualitas-1.jpg",
     name: { en: "Gayo Coffee, Grade 1", id: "Kopi Gayo Kualitas 1" },
     category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
     description: { en: "Gayo coffee listing for Grade 1; grading criteria and product form are confirmed with the buyer.", id: "Listing kopi Gayo Grade 1; kriteria grading dan bentuk produk dikonfirmasi bersama pembeli." },
@@ -259,7 +259,7 @@ const additionalProductRecords: ProductRecord[] = [
     applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
   }),
   inquiryOnlyProduct({
-    id: "prd-gayo-tetangga", slug: "kopi-gayo-tetangga", image: "/products/kopi-gayo-tetangga.svg",
+    id: "prd-gayo-tetangga", slug: "kopi-gayo-tetangga", image: "/products/kopi-gayo-tetangga.jpg",
     name: { en: "Gayo Tetangga Coffee", id: "Kopi Gayo Tetangga" },
     category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
     description: { en: "Gayo coffee listing under the name provided; the meaning of this grade or product term should be confirmed.", id: "Listing kopi Gayo dengan nama yang diberikan; arti istilah grade atau produk ini perlu dikonfirmasi." },
@@ -267,7 +267,7 @@ const additionalProductRecords: ProductRecord[] = [
     applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
   }),
   inquiryOnlyProduct({
-    id: "prd-cloves", slug: "cengkeh", image: "/products/cengkeh.svg",
+    id: "prd-cloves", slug: "cengkeh", image: "/products/cengkeh.jpg",
     name: { en: "Cloves", id: "Cengkeh" },
     category: { en: "Spices", id: "Rempah" }, categorySlug: "spices",
     description: { en: "Clove product listing; whole or processed form, origin, and grade are confirmed with the buyer.", id: "Listing produk cengkeh; bentuk utuh atau olahan, asal, dan grade dikonfirmasi bersama pembeli." },
@@ -275,7 +275,7 @@ const additionalProductRecords: ProductRecord[] = [
     applications: { en: ["Food and spice trade; product form to be confirmed"], id: ["Perdagangan pangan dan rempah; bentuk produk perlu dikonfirmasi"] },
   }),
   inquiryOnlyProduct({
-    id: "prd-charcoal", slug: "arang", image: "/products/arang.svg",
+    id: "prd-charcoal", slug: "arang", image: "/products/arang.jpg",
     name: { en: "Charcoal", id: "Arang" },
     category: { en: "Biomass & Fuel", id: "Biomassa & Bahan Bakar" }, categorySlug: "biomass-fuel",
     description: { en: "Charcoal product listing; feedstock, form, intended use, and export requirements are confirmed with the buyer.", id: "Listing produk arang; bahan baku, bentuk, penggunaan, dan persyaratan ekspor dikonfirmasi bersama pembeli." },
@@ -283,7 +283,7 @@ const additionalProductRecords: ProductRecord[] = [
     applications: { en: ["Fuel or industrial use; product type to be confirmed"], id: ["Penggunaan bahan bakar atau industri; tipe produk perlu dikonfirmasi"] },
   }),
   inquiryOnlyProduct({
-    id: "prd-cocofit", slug: "cocofit", image: "/products/cocofit.svg",
+    id: "prd-cocofit", slug: "cocofit", image: "/products/cocofit.jpg",
     name: { en: "Cocofit", id: "Cocofit" },
     category: { en: "Coconut Products", id: "Produk Kelapa" }, categorySlug: "coconut-products",
     description: { en: "Cocofit product listing; product form, composition, origin, and intended use are confirmed with the buyer.", id: "Listing produk Cocofit; bentuk, komposisi, asal, dan penggunaan produk dikonfirmasi bersama pembeli." },
