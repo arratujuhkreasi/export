@@ -132,17 +132,25 @@ export default async function ProductDetailPage({ params, searchParams }: Produc
 
               {/* Rating */}
               <div className="mt-3 flex items-center gap-3">
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`size-4 ${i < Math.floor(product.rating) ? "fill-amber-400 text-amber-400" : "fill-muted text-muted"}`}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-medium">{product.rating}</span>
-                <span className="text-sm text-muted-foreground">({product.reviewCount} reviews)</span>
+                {product.reviewCount > 0 ? (
+                  <>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`size-4 ${i < Math.floor(product.rating) ? "fill-amber-400 text-amber-400" : "fill-muted text-muted"}`}
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium">{product.rating}</span>
+                    <span className="text-sm text-muted-foreground">({product.reviewCount} reviews)</span>
+                  </>
+                ) : (
+                  <span className="text-sm text-muted-foreground">
+                    {locale === "id" ? "Belum ada ulasan" : "No reviews yet"}
+                  </span>
+                )}
               </div>
 
               {/* Description */}

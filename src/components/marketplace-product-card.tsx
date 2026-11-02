@@ -6,7 +6,7 @@ import { MapPin, Star } from "lucide-react";
 
 import { AddToInquiryButton } from "@/components/add-to-inquiry-button";
 import type { Product } from "@/lib/cms";
-import { hrefWithLocale, type Locale, ui } from "@/lib/i18n";
+import { hrefWithLocale, type Locale } from "@/lib/i18n";
 
 export function MarketplaceProductCard({
   product,
@@ -17,8 +17,6 @@ export function MarketplaceProductCard({
   locale: Locale;
   imageLoading?: "eager" | "lazy";
 }) {
-  const copy = ui[locale].products;
-
   return (
     <div className="marketplace-card group flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-white shadow-sm">
       {/* Image */}
@@ -75,11 +73,17 @@ export function MarketplaceProductCard({
 
         {/* Rating + Origin */}
         <div className="mt-3 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1">
-            <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
-            <span className="text-xs font-medium">{product.rating}</span>
-            <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
-          </div>
+          {product.reviewCount > 0 ? (
+            <div className="flex items-center gap-1">
+              <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+              <span className="text-xs font-medium">{product.rating}</span>
+              <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
+            </div>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              {locale === "id" ? "Belum ada ulasan" : "No reviews yet"}
+            </span>
+          )}
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <MapPin className="size-3" aria-hidden="true" />
             <span className="truncate max-w-[100px]">{product.origin.split(",")[0]}</span>

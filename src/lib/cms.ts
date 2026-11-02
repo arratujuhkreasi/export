@@ -123,10 +123,13 @@ type PostRecord = Omit<Post, "title" | "excerpt" | "readTime" | "content"> & {
 };
 
 const categoryRecords: CategoryRecord[] = [
-  { id: "cat-coconut", slug: "coconut-products", name: { en: "Coconut Products", id: "Produk Kelapa" }, icon: "🥥", productCount: 2 },
+  { id: "cat-coconut", slug: "coconut-products", name: { en: "Coconut Products", id: "Produk Kelapa" }, icon: "🥥", productCount: 3 },
   { id: "cat-timber", slug: "certified-timber", name: { en: "Certified Timber", id: "Kayu Bersertifikat" }, icon: "🪵", productCount: 1 },
   { id: "cat-fresh", slug: "fresh-produce", name: { en: "Fresh Produce", id: "Hasil Segar" }, icon: "🍠", productCount: 1 },
   { id: "cat-plantation", slug: "plantation", name: { en: "Plantation", id: "Perkebunan" }, icon: "🌴", productCount: 1 },
+  { id: "cat-coffee", slug: "gayo-coffee", name: { en: "Gayo Coffee", id: "Kopi Gayo" }, icon: "☕", productCount: 4 },
+  { id: "cat-spices", slug: "spices", name: { en: "Spices", id: "Rempah" }, icon: "🌿", productCount: 1 },
+  { id: "cat-biomass", slug: "biomass-fuel", name: { en: "Biomass & Fuel", id: "Biomassa & Bahan Bakar" }, icon: "🔥", productCount: 1 },
   { id: "cat-bulk", slug: "bulk-orders", name: { en: "Bulk Orders", id: "Order Besar" }, icon: "📦", productCount: 5 },
   { id: "cat-docs", slug: "documentation-ready", name: { en: "Docs Ready", id: "Siap Dokumen" }, icon: "📄", productCount: 5 },
   { id: "cat-featured", slug: "featured", name: { en: "Featured", id: "Unggulan" }, icon: "⭐", productCount: 3 },
@@ -169,6 +172,124 @@ const testimonialRecords: TestimonialRecord[] = [
       id: "Saya sangat suka kualitas produknya. Pasti akan belanja di sini lagi!",
     },
   },
+];
+
+const inquiryOnlyProduct = (product: {
+  id: string;
+  slug: string;
+  name: Localized;
+  category: Localized;
+  categorySlug: string;
+  image: string;
+  description: Localized;
+  grade: Localized;
+  applications: Localized<string[]>;
+}) : ProductRecord => ({
+  ...product,
+  longDescription: {
+    en: `${product.description.en} Product form, origin, detailed specifications, and destination requirements are confirmed with the buyer before quotation.`,
+    id: `${product.description.id} Bentuk produk, asal, spesifikasi rinci, dan persyaratan negara tujuan dikonfirmasi bersama pembeli sebelum penawaran.`,
+  },
+  origin: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+  priceRange: { en: "Contact for quotation", id: "Hubungi untuk penawaran" },
+  minOrder: { en: "To be confirmed during inquiry", id: "Dikonfirmasi saat inquiry" },
+  incoterm: { en: "To be confirmed by destination", id: "Dikonfirmasi sesuai negara tujuan" },
+  leadTime: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+  hsCode: "To be confirmed for product form and destination",
+  supplyCapacity: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+  catalogNote: {
+    en: "Product listing added. Price, origin, product form, export documents, and specifications require confirmation before a formal quotation.",
+    id: "Listing produk telah ditambahkan. Harga, asal, bentuk produk, dokumen ekspor, dan spesifikasi perlu dikonfirmasi sebelum penawaran resmi.",
+  },
+  rating: 0,
+  reviewCount: 0,
+  isFeatured: false,
+  isNew: true,
+  discount: { en: "New Listing", id: "Produk Baru" },
+  specs: {
+    grade: product.grade,
+    moisture: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+    packaging: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+    shelfLife: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+  },
+  documents: {
+    en: ["To be confirmed based on product form and destination"],
+    id: ["Perlu dikonfirmasi berdasarkan bentuk produk dan negara tujuan"],
+  },
+  applications: product.applications,
+  knowledge: {
+    en: [
+      "The listed name follows the current catalog request. Buyers should confirm the exact product form and specification before requesting a formal quotation.",
+      "Origin, grade, packaging, minimum order, export documents, and destination compliance are confirmed for each buyer inquiry.",
+    ],
+    id: [
+      "Nama yang ditampilkan mengikuti permintaan katalog saat ini. Pembeli perlu mengonfirmasi bentuk dan spesifikasi produk sebelum meminta penawaran resmi.",
+      "Asal, grade, kemasan, minimum order, dokumen ekspor, dan kepatuhan negara tujuan dikonfirmasi untuk setiap inquiry pembeli.",
+    ],
+  },
+  qualityControl: {
+    en: ["Product form and grade confirmation", "Buyer specification review", "Packaging and destination requirement confirmation"],
+    id: ["Konfirmasi bentuk dan grade produk", "Review spesifikasi pembeli", "Konfirmasi kemasan dan persyaratan negara tujuan"],
+  },
+});
+
+const additionalProductRecords: ProductRecord[] = [
+  inquiryOnlyProduct({
+    id: "prd-gayo-whine-coffee", slug: "kopi-gayo-whine", image: "/products/kopi-gayo-whine.svg",
+    name: { en: "Gayo Whine Coffee", id: "Kopi Gayo Whine" },
+    category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
+    description: { en: "Gayo coffee listing. Processing method, grade, and product form are confirmed with the buyer.", id: "Listing kopi Gayo. Metode proses, grade, dan bentuk produk dikonfirmasi bersama pembeli." },
+    grade: { en: "Whine (as listed); exact grade to be confirmed", id: "Whine (sesuai nama yang diberikan); grade perlu dikonfirmasi" },
+    applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
+  }),
+  inquiryOnlyProduct({
+    id: "prd-gayo-mid-grade", slug: "kopi-gayo-kualitas-menengah", image: "/products/kopi-gayo-kualitas-menengah.svg",
+    name: { en: "Gayo Coffee, Mid Grade", id: "Kopi Gayo Kualitas Menengah" },
+    category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
+    description: { en: "Gayo coffee listing for the mid-grade range; grade criteria and product form are confirmed with the buyer.", id: "Listing kopi Gayo untuk rentang kualitas menengah; kriteria grade dan bentuk produk dikonfirmasi bersama pembeli." },
+    grade: { en: "Mid grade; grading criteria to be confirmed", id: "Kualitas menengah; kriteria grading perlu dikonfirmasi" },
+    applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
+  }),
+  inquiryOnlyProduct({
+    id: "prd-gayo-grade-one", slug: "kopi-gayo-kualitas-1", image: "/products/kopi-gayo-kualitas-1.svg",
+    name: { en: "Gayo Coffee, Grade 1", id: "Kopi Gayo Kualitas 1" },
+    category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
+    description: { en: "Gayo coffee listing for Grade 1; grading criteria and product form are confirmed with the buyer.", id: "Listing kopi Gayo Grade 1; kriteria grading dan bentuk produk dikonfirmasi bersama pembeli." },
+    grade: { en: "Grade 1; grading criteria to be confirmed", id: "Kualitas 1; kriteria grading perlu dikonfirmasi" },
+    applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
+  }),
+  inquiryOnlyProduct({
+    id: "prd-gayo-tetangga", slug: "kopi-gayo-tetangga", image: "/products/kopi-gayo-tetangga.svg",
+    name: { en: "Gayo Tetangga Coffee", id: "Kopi Gayo Tetangga" },
+    category: { en: "Gayo Coffee", id: "Kopi Gayo" }, categorySlug: "gayo-coffee",
+    description: { en: "Gayo coffee listing under the name provided; the meaning of this grade or product term should be confirmed.", id: "Listing kopi Gayo dengan nama yang diberikan; arti istilah grade atau produk ini perlu dikonfirmasi." },
+    grade: { en: "Tetangga (as listed); specification to be confirmed", id: "Tetangga (sesuai nama yang diberikan); spesifikasi perlu dikonfirmasi" },
+    applications: { en: ["Coffee roasting", "Coffee trading; product form to be confirmed"], id: ["Roasting kopi", "Perdagangan kopi; bentuk produk perlu dikonfirmasi"] },
+  }),
+  inquiryOnlyProduct({
+    id: "prd-cloves", slug: "cengkeh", image: "/products/cengkeh.svg",
+    name: { en: "Cloves", id: "Cengkeh" },
+    category: { en: "Spices", id: "Rempah" }, categorySlug: "spices",
+    description: { en: "Clove product listing; whole or processed form, origin, and grade are confirmed with the buyer.", id: "Listing produk cengkeh; bentuk utuh atau olahan, asal, dan grade dikonfirmasi bersama pembeli." },
+    grade: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+    applications: { en: ["Food and spice trade; product form to be confirmed"], id: ["Perdagangan pangan dan rempah; bentuk produk perlu dikonfirmasi"] },
+  }),
+  inquiryOnlyProduct({
+    id: "prd-charcoal", slug: "arang", image: "/products/arang.svg",
+    name: { en: "Charcoal", id: "Arang" },
+    category: { en: "Biomass & Fuel", id: "Biomassa & Bahan Bakar" }, categorySlug: "biomass-fuel",
+    description: { en: "Charcoal product listing; feedstock, form, intended use, and export requirements are confirmed with the buyer.", id: "Listing produk arang; bahan baku, bentuk, penggunaan, dan persyaratan ekspor dikonfirmasi bersama pembeli." },
+    grade: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+    applications: { en: ["Fuel or industrial use; product type to be confirmed"], id: ["Penggunaan bahan bakar atau industri; tipe produk perlu dikonfirmasi"] },
+  }),
+  inquiryOnlyProduct({
+    id: "prd-cocofit", slug: "cocofit", image: "/products/cocofit.svg",
+    name: { en: "Cocofit", id: "Cocofit" },
+    category: { en: "Coconut Products", id: "Produk Kelapa" }, categorySlug: "coconut-products",
+    description: { en: "Cocofit product listing; product form, composition, origin, and intended use are confirmed with the buyer.", id: "Listing produk Cocofit; bentuk, komposisi, asal, dan penggunaan produk dikonfirmasi bersama pembeli." },
+    grade: { en: "To be confirmed", id: "Perlu dikonfirmasi" },
+    applications: { en: ["To be confirmed from product specification"], id: ["Dikonfirmasi berdasarkan spesifikasi produk"] },
+  }),
 ];
 
 const productRecords: ProductRecord[] = [
@@ -482,6 +603,7 @@ const productRecords: ProductRecord[] = [
       id: ["Sortir kematangan dan warna", "Grading ukuran", "Inspeksi kesegaran dan busuk", "Review kepatuhan negara tujuan"],
     },
   },
+  ...additionalProductRecords,
 ];
 
 const postRecords: PostRecord[] = [
